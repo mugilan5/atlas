@@ -1,413 +1,97 @@
-﻿"use client";
+"use client";
+
+import { useState } from "react";
+import Map, {
+  NavigationControl,
+  ScaleControl,
+} from "react-map-gl/mapbox";
 
 import { RealisticCrowd } from "@/components/map/realistic-crowd";
 
+type MapViewStyle = "normal" | "satellite";
 
-import { useMemo, useState } from "react";
-import Map, {
-  Layer,
-  Marker,
-  NavigationControl,
-  ScaleControl,
-  Source,
-} from "react-map-gl/mapbox";
-import type {
-  FeatureCollection,
-  LineString,
-  Point,
-  Polygon,
-} from "geojson";
-import {
-  AlertTriangle,
-  Hospital,
-  LocateFixed,
-  Shield,
-  TrainFront,
-} from "lucide-react";
-import { RALLY_CENTER, ROUTES } from "@/data/scenario";
-import { useAtlasStore } from "@/store/use-atlas-store";
-import {
-  chennaiCityLocations,
-  chennaiHighways,
-  chennaiRoadClosures,
-} from "@/data/chennai-city-layers";
-
-import { CityIconMarkers } from "@/components/map/city-icon-markers";
+const MAP_STYLES: Record<MapViewStyle, string> = {
+  normal: "mapbox://styles/mapbox/streets-v12",
+  satellite: "mapbox://styles/mapbox/satellite-streets-v12",
+};
 
 const CHENNAI_VIEW = {
   longitude: 80.2824,
   latitude: 13.0507,
-  zoom: 14.15,
-  pitch: 42,
-  bearing: -8,
+  zoom: 14.2,
+  pitch: 0,
+  bearing: 0,
 };
 
-const MAPBOX_ACCESS_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
-const MAPBOX_STYLE = "mapbox://styles/mapbox/satellite-streets-v12";
-
-const routeColors = ["#ff4147", "#f5bf35", "#39c983", "#4a8dff", "#a879ff"];
-
 export function AtlasMap() {
-  const agents = useAtlasStore((state) => state.agents);
-  const layers = useAtlasStore((state) => state.layers);
-  const [mapError, setMapError] = useState<string | null>(null);
+  const [mapViewStyle, setMapViewStyle] =
+    useState<MapViewStyle>("normal");
 
-  const agentGeoJson = useMemo<FeatureCollection<Point>>(
-    () => ({
-      type: "FeatureCollection",
-      features: agents.map((agent) => ({
-        type: "Feature",
-        geometry: {
-          type: "Point",
-          coordinates: agent.coordinate,
-        },
-        properties: {
-          id: agent.id,
-          status: agent.status,
-          transportMode: agent.transportMode,
-          weight: agent.weight,
-        },
-      })),
-    }),
-    [agents],
-  );
+  const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
 
-  const routesGeoJson = useMemo<FeatureCollection<LineString>>(
-    () => ({
-      type: "FeatureCollection",
-      features: ROUTES.map((coordinates, index) => ({
-        type: "Feature",
-        geometry: {
-          type: "LineString",
-          coordinates,
-        },
-        properties: {
-          index,
-          color: routeColors[index],
-        },
-      })),
-    }),
-    [],
-  );
-
-  const rallyZone = useMemo<FeatureCollection<Polygon>>(
-    () => ({
-      type: "FeatureCollection",
-      features: [
-        {
-          type: "Feature",
-          properties: {},
-          geometry: {
-            type: "Polygon",
-            coordinates: [
-              [
-                [80.2796, 13.0464],
-                [80.2892, 13.0464],
-                [80.2894, 13.0555],
-                [80.2798, 13.0557],
-                [80.2796, 13.0464],
-              ],
-            ],
-          },
-        },
-      ],
-    }),
-    [],
-  );
+  if (!token) {
+    return (
+      <div className="map-token-error">
+        Mapbox token is missing. Add
+        NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN to .env.local.
+      </div>
+    );
+  }
 
   return (
     <div className="real-chennai-map">
       <Map
+        key={mapViewStyle}
         initialViewState={CHENNAI_VIEW}
-        mapStyle={MAPBOX_STYLE}
-        mapboxAccessToken={MAPBOX_ACCESS_TOKEN}
-        attributionControl={true}
-        style={{ width: "100%", height: "100%" }}
-        reuseMaps
-        maxPitch={65}
-        minZoom={9}
-        maxZoom={18}
-        onLoad={() => setMapError(null)}
+        mapboxAccessToken={token}
+        mapStyle={MAP_STYLES[mapViewStyle]}
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+        }}
+        attributionControl
+        reuseMaps={false}
         onError={(event) => {
-          const message =
-            event.error instanceof Error
-              ? event.error.message
-              : "Map tiles could not be loaded.";
-
-          // MapLibre can report layer/source errors while React is rendering.
-          // Defer the state update to avoid updating AtlasMap during Layer render.
-          window.setTimeout(() => {
-            setMapError((current) =>
-              current === message ? current : message
-            );
-          }, 0);
+          console.error("Mapbox error:", event.error);
         }}
       >
         <NavigationControl
           position="bottom-right"
           showCompass
-          visualizePitch
+          showZoom
         />
-        <ScaleControl position="bottom-left" unit="metric" />
 
-        <Source id="atlas-routes" type="geojson" data={routesGeoJson}>
-          {layers["traffic-flow"] ? (
-            <Layer
-              id="atlas-route-shadow"
-              type="line"
-              paint={{
-                "line-color": "#020304",
-                "line-width": 6,
-                "line-opacity": 0.75,
-              }}
-            />
-          ) : null}
+        <ScaleControl
+          position="bottom-left"
+          unit="metric"
+        />
 
-          {layers["traffic-flow"] ? (
-            <Layer
-              id="atlas-route-lines"
-              type="line"
-              paint={{
-                "line-color": ["get", "color"],
-                "line-width": 2.4,
-                "line-opacity": 0.86,
-              }}
-            />
-          ) : null}
-        </Source>
-
-        <Source id="atlas-rally-zone" type="geojson" data={rallyZone}>
-          <Layer
-            id="atlas-rally-fill"
-            type="fill"
-            paint={{
-              "fill-color": "#ff4147",
-              "fill-opacity": 0.12,
-            }}
-          />
-          <Layer
-            id="atlas-rally-outline"
-            type="line"
-            paint={{
-              "line-color": "#ff5960",
-              "line-width": 1.8,
-              "line-dasharray": [2, 1.4],
-            }}
-          />
-        </Source>
-        {/* Original straight-line agents replaced by RoadCrowd */}
-
-
-        <Marker
-          longitude={RALLY_CENTER[0]}
-          latitude={RALLY_CENTER[1]}
-          anchor="bottom"
-        >
-          <div className="real-map-marker marker-stage">MAIN STAGE</div>
-        </Marker>
-
-        <Marker longitude={80.2738} latitude={13.069} anchor="bottom">
-          <div className="real-map-icon">
-            <TrainFront size={14} /> METRO
-          </div>
-        </Marker>
-
-        <Marker longitude={80.2707} latitude={13.075} anchor="bottom">
-          <div className="real-map-icon">
-            <Hospital size={14} /> HOSPITAL
-          </div>
-        </Marker>
-
-        <Marker longitude={80.264} latitude={13.043} anchor="bottom">
-          <div className="real-map-icon marker-danger">
-            <AlertTriangle size={14} /> ROAD BLOCK
-          </div>
-        </Marker>
-
-        {layers["police-units"] && (
-          <Marker longitude={80.281} latitude={13.053} anchor="bottom">
-            <div className="real-map-icon">
-              <Shield size={14} /> POLICE
-            </div>
-          </Marker>
-        )}
-      
-        {/* ATLAS_CITY_LAYERS_START */}
-
-        <Source
-          id="chennai-highways"
-          type="geojson"
-          data={chennaiHighways}
-        >
-          <Layer
-            id="chennai-highway-shadow"
-            type="line"
-            paint={{
-              "line-color": "#000000",
-              "line-width": 7,
-              "line-opacity": 0.7,
-            }}
-          />
-
-          <Layer
-            id="chennai-highway-lines"
-            type="line"
-            paint={{
-              "line-color": ["get", "color"],
-              "line-width": 4,
-              "line-opacity": 0.9,
-            }}
-          />
-
-          <Layer
-            id="chennai-highway-labels"
-            type="symbol"
-            layout={{
-              "symbol-placement": "line",
-              "text-field": ["get", "name"],
-              "text-size": 11,
-              "text-letter-spacing": 0.08,
-              "text-allow-overlap": false,
-            }}
-            paint={{
-              "text-color": "#facc15",
-              "text-halo-color": "#050708",
-              "text-halo-width": 2,
-            }}
-          />
-        </Source>
-
-        <Source
-          id="chennai-road-closures"
-          type="geojson"
-          data={chennaiRoadClosures}
-        >
-          <Layer
-            id="chennai-road-closure-shadow"
-            type="line"
-            paint={{
-              "line-color": "#000000",
-              "line-width": 10,
-              "line-opacity": 0.8,
-            }}
-          />
-
-          <Layer
-            id="chennai-road-closure-lines"
-            type="line"
-            paint={{
-              "line-color": ["get", "color"],
-              "line-width": 6,
-              "line-opacity": 1,
-              "line-dasharray": [1.5, 1.2],
-            }}
-          />
-
-          <Layer
-            id="chennai-road-closure-labels"
-            type="symbol"
-            layout={{
-              "symbol-placement": "line",
-              "text-field": ["get", "name"],
-              "text-size": 12,
-              "text-letter-spacing": 0.08,
-              "text-allow-overlap": false,
-            }}
-            paint={{
-              "text-color": "#ec4899",
-              "text-halo-color": "#050708",
-              "text-halo-width": 2,
-            }}
-          />
-        </Source>
-        {/* Chennai POIs are rendered by CityIconMarkers */}
-
-
-        {/* ATLAS_CITY_LAYERS_END */}
-
-              <CityIconMarkers />
-
-              
-
-              <RealisticCrowd />
-
+        <RealisticCrowd />
       </Map>
 
-      
-      {/* ATLAS_MAP_LEGEND_START */}
-      <div className="atlas-map-legend">
-        <div className="atlas-map-legend-title">CHENNAI MAP LAYERS</div>
+      <div
+        className="map-view-switch"
+        role="group"
+        aria-label="Map view"
+      >
+        <button
+          type="button"
+          className={mapViewStyle === "normal" ? "active" : ""}
+          onClick={() => setMapViewStyle("normal")}
+        >
+          Map
+        </button>
 
-        <div className="atlas-map-legend-grid">
-
-          <div className="atlas-map-legend-item">
-            <span
-              className="atlas-map-legend-dot"
-              style={{ background: "#ef4444", color: "#ef4444" }}
-            />
-            Hospitals
-          </div>
-
-          <div className="atlas-map-legend-item">
-            <span
-              className="atlas-map-legend-dot"
-              style={{ background: "#3b82f6", color: "#3b82f6" }}
-            />
-            Metro stations
-          </div>
-
-          <div className="atlas-map-legend-item">
-            <span
-              className="atlas-map-legend-dot"
-              style={{ background: "#f97316", color: "#f97316" }}
-            />
-            Railway stations
-          </div>
-
-          <div className="atlas-map-legend-item">
-            <span
-              className="atlas-map-legend-dot"
-              style={{ background: "#06b6d4", color: "#06b6d4" }}
-            />
-            Police stations
-          </div>
-
-          <div className="atlas-map-legend-item">
-            <span
-              className="atlas-map-legend-line"
-              style={{ background: "#facc15", color: "#facc15" }}
-            />
-            Highways
-          </div>
-
-          <div className="atlas-map-legend-item">
-            <span
-              className="atlas-map-legend-line closure"
-              style={{ color: "#ec4899" }}
-            />
-            Road closures
-          </div>
-        </div>
+        <button
+          type="button"
+          className={mapViewStyle === "satellite" ? "active" : ""}
+          onClick={() => setMapViewStyle("satellite")}
+        >
+          Satellite
+        </button>
       </div>
-      {/* ATLAS_MAP_LEGEND_END */}
-
-      <div className="map-source-badge">
-        <LocateFixed size={12} />
-        LIVE CHENNAI BASEMAP · OSM/CARTO
-      </div>
-
-      {mapError && (
-        <div className="map-network-warning" role="status">
-          <AlertTriangle size={14} />
-          <div>
-            <strong>Basemap connection interrupted</strong>
-            <span>
-              Check the internet connection. Map tiles will return
-              automatically when the service is reachable.
-            </span>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

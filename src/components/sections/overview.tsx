@@ -1,61 +1,25 @@
-﻿"use client";
+"use client";
 
 import {
   Activity,
   AlertTriangle,
   Ambulance,
   Bus,
-  Camera,
-  Check,
   CloudSun,
   Download,
-  Hospital,
   Pause,
   Play,
   RotateCcw,
   Route,
   Shield,
-  TrainFront,
   Users,
 } from "lucide-react";
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  Cell,
-  Pie,
-  PieChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+
 import { useState } from "react";
-import { MAP_LAYERS } from "@/data/scenario";
 import { downloadSimulationReport } from "@/lib/report";
 import { formatSimulationTime, metricClass, riskLabel } from "@/lib/format";
-import type { InterventionId } from "@/simulation/types";
 import { useAtlasStore } from "@/store/use-atlas-store";
 import { AtlasMap } from "@/components/map/atlas-map";
-
-const interventions: Array<{
-  id: InterventionId;
-  label: string;
-  description: string;
-  icon: typeof Shield;
-}> = [
-  { id: "add-police", label: "Add Police", description: "Deploy 200 personnel", icon: Shield },
-  { id: "open-gate", label: "Open New Gate", description: "Add 2 entry gates", icon: Route },
-  { id: "add-shuttle-buses", label: "Add Shuttle Buses", description: "Increase capacity", icon: Bus },
-  { id: "open-alternate-road", label: "Open Alternate Road", description: "Divert traffic", icon: RotateCcw },
-];
-
-const transportData = [
-  { name: "Metro", value: 38, fill: "#2f7ef5" },
-  { name: "Bus", value: 32, fill: "#37c780" },
-  { name: "Cars", value: 20, fill: "#e7b436" },
-  { name: "Auto/Taxi", value: 10, fill: "#8f62de" },
-];
 
 export function OverviewSection() {
   const store = useAtlasStore();
@@ -131,20 +95,6 @@ export function OverviewSection() {
             <span>LIVE SIMULATION</span>
             <i className="live-dot" />
             <strong>{currentTime}</strong>
-          </div>
-
-          <div className="layer-control">
-            <strong>MAP LAYERS</strong>
-            {MAP_LAYERS.map((layer) => (
-              <label key={layer.id}>
-                <input
-                  type="checkbox"
-                  checked={store.layers[layer.id]}
-                  onChange={() => store.toggleLayer(layer.id)}
-                />
-                <span>{layer.label}</span>
-              </label>
-            ))}
           </div>
 
           <AtlasMap />
@@ -237,60 +187,7 @@ export function OverviewSection() {
         </button>
       </aside>
 
-      <section className="analysis-strip panel">
-        <div className="chart-panel">
-          <div className="strip-heading"><span>CROWD DENSITY OVER TIME</span><b>LIVE</b></div>
-          <div className="chart-container">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={store.trend.length ? store.trend : [{ minute: 0, crowdDensity: store.metrics.crowdDensity, riskScore: store.metrics.riskScore }]}>
-                <defs>
-                  <linearGradient id="crowdFill" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#ff4141" stopOpacity={0.35} />
-                    <stop offset="100%" stopColor="#ff4141" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid stroke="#202830" vertical={false} />
-                <XAxis dataKey="minute" stroke="#6e7882" fontSize={9} tickFormatter={(value: number) => `${Math.floor(value / 60) + 5} PM`} />
-                <YAxis stroke="#6e7882" fontSize={9} domain={[0, 10]} />
-                <Tooltip contentStyle={{ background: "#090d11", border: "1px solid #30363d", fontSize: 11 }} />
-                <Area type="monotone" dataKey="crowdDensity" stroke="#ff4141" fill="url(#crowdFill)" strokeWidth={2} />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
 
-        <div className="transport-panel">
-          <div className="strip-heading"><span>TRANSPORT USAGE</span><b>MODE SPLIT</b></div>
-          <div className="transport-content">
-            <ResponsiveContainer width={150} height={128}>
-              <PieChart>
-                <Pie data={transportData} dataKey="value" innerRadius={36} outerRadius={57} paddingAngle={1} stroke="none">
-                  {transportData.map((entry) => <Cell key={entry.name} fill={entry.fill} />)}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-            <div className="transport-legend">
-              {transportData.map((item) => <span key={item.name}><i style={{ background: item.fill }} />{item.name}<b>{item.value}%</b></span>)}
-            </div>
-          </div>
-        </div>
-
-        <div className="intervention-panel">
-          <div className="strip-heading"><span>INTERVENTIONS</span><b>{store.interventions.length} ACTIVE</b></div>
-          <div className="intervention-list">
-            {interventions.map(({ id, label, description, icon: Icon }) => {
-              const applied = store.interventions.includes(id);
-              return (
-                <button key={id} className={applied ? "applied" : ""} disabled={applied} onClick={() => store.applyIntervention(id)}>
-                  <Icon size={15} />
-                  <span><strong>{label}</strong><small>{description}</small></span>
-                  {applied ? <Check size={14} /> : <b>+</b>}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </section>
     </div>
   );
 }
