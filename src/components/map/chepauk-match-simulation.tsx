@@ -9,7 +9,7 @@ import type {
 } from "geojson";
 import { Layer, Source } from "react-map-gl/mapbox";
 
-import { YMCA_RALLY_CENTER } from "@/data/scenario";
+import { CHEPAUK_STADIUM_CENTER } from "@/data/scenario";
 import { useAtlasStore } from "@/store/use-atlas-store";
 
 type TravelMode = "bus" | "walk";
@@ -66,39 +66,36 @@ type MapboxDirectionsResponse = {
   }>;
 };
 
-const ROUTE_CACHE_KEY = "atlas-ymca-ground-routes-v7";
+const ROUTE_CACHE_KEY = "atlas-chepauk-match-routes-v1";
 
 /*
  * Conservative open-field polygon inside the large western YMCA ground.
  * The eastern college buildings, synthetic pitch and road are excluded.
  */
-const YMCA_EVENT_GROUND_CENTER: [number, number] = [
-  80.23545,
-  13.02475,
-];
+const CHEPAUK_EVENT_GROUND_CENTER: [number, number] = CHEPAUK_STADIUM_CENTER;
 
 /*
  * Conservative inner area of the large open YMCA field.
  * This deliberately stays away from surrounding buildings,
  * cricket nets and internal roads.
  */
-const GROUND_LONGITUDE_RADIUS = 0.00072;
-const GROUND_LATITUDE_RADIUS = 0.00118;
+const GROUND_LONGITUDE_RADIUS = 0.00078;
+const GROUND_LATITUDE_RADIUS = 0.00070;
 
 /*
  * Polygon used for the visible ground outline.
  * Generated from the same ellipse used to place arrived people.
  */
-const YMCA_OPEN_GROUND: Array<[number, number]> =
+const CHEPAUK_STADIUM_FOOTPRINT: Array<[number, number]> =
   Array.from({ length: 36 }, (_, index) => {
     const angle =
       (index / 36) * Math.PI * 2;
 
     return [
-      YMCA_EVENT_GROUND_CENTER[0] +
+      CHEPAUK_EVENT_GROUND_CENTER[0] +
         Math.cos(angle) *
           GROUND_LONGITUDE_RADIUS,
-      YMCA_EVENT_GROUND_CENTER[1] +
+      CHEPAUK_EVENT_GROUND_CENTER[1] +
         Math.sin(angle) *
           GROUND_LATITUDE_RADIUS,
     ];
@@ -107,18 +104,18 @@ const YMCA_OPEN_GROUND: Array<[number, number]> =
 /*
  * People enter from the eastern side of the open ground.
  */
-const YMCA_GROUND_GATE: [number, number] = [
-  80.23622,
-  13.02478,
+const CHEPAUK_STADIUM_GATE: [number, number] = [
+  80.28025,
+  13.06325,
 ];
 
 /*
  * Public transport passengers leave the bus near Anna Salai/Nandanam
  * and walk the final section to the ground.
  */
-const NANDANAM_DROP_OFF: [number, number] = [
-  80.23789,
-  13.02984,
+const CHEPAUK_DROP_OFF: [number, number] = [
+  80.27680,
+  13.06455,
 ];
 
 /*
@@ -131,124 +128,124 @@ const NANDANAM_DROP_OFF: [number, number] = [
  */
 const RESIDENTIAL_AREAS: ResidentialArea[] = [
   {
-    name: "Nandanam",
-    coordinate: [80.2400, 13.0288],
-    spread: 0.009,
-    routeCount: 10,
+    name: "Triplicane",
+    coordinate: [80.2766, 13.0608],
+    spread: 0.007,
+    routeCount: 8,
   },
   {
-    name: "Saidapet",
-    coordinate: [80.2283, 13.0237],
-    spread: 0.012,
-    routeCount: 10,
+    name: "Royapettah",
+    coordinate: [80.2642, 13.0540],
+    spread: 0.009,
+    routeCount: 7,
+  },
+  {
+    name: "Mylapore",
+    coordinate: [80.2676, 13.0339],
+    spread: 0.010,
+    routeCount: 6,
+  },
+  {
+    name: "Egmore",
+    coordinate: [80.2607, 13.0732],
+    spread: 0.010,
+    routeCount: 6,
+  },
+  {
+    name: "Chintadripet",
+    coordinate: [80.2710, 13.0750],
+    spread: 0.007,
+    routeCount: 5,
+  },
+  {
+    name: "Nungambakkam",
+    coordinate: [80.2425, 13.0604],
+    spread: 0.011,
+    routeCount: 5,
   },
   {
     name: "T Nagar",
     coordinate: [80.2337, 13.0418],
     spread: 0.011,
-    routeCount: 8,
+    routeCount: 4,
   },
   {
-    name: "CIT Nagar",
-    coordinate: [80.2350, 13.0350],
-    spread: 0.009,
-    routeCount: 8,
-  },
-  {
-    name: "West Mambalam",
-    coordinate: [80.2250, 13.0382],
-    spread: 0.011,
-    routeCount: 6,
-  },
-  {
-    name: "Kotturpuram",
-    coordinate: [80.2420, 13.0180],
-    spread: 0.011,
-    routeCount: 6,
-  },
-  {
-    name: "Guindy",
-    coordinate: [80.2209, 13.0108],
+    name: "Saidapet",
+    coordinate: [80.2283, 13.0237],
     spread: 0.012,
-    routeCount: 6,
-  },
-  {
-    name: "Mylapore",
-    coordinate: [80.2676, 13.0339],
-    spread: 0.012,
-    routeCount: 6,
+    routeCount: 4,
   },
   {
     name: "Adyar",
     coordinate: [80.2565, 13.0067],
     spread: 0.013,
-    routeCount: 6,
+    routeCount: 4,
   },
   {
     name: "Velachery",
     coordinate: [80.2189, 12.9815],
     spread: 0.015,
-    routeCount: 6,
-  },
-  {
-    name: "Kodambakkam",
-    coordinate: [80.2290, 13.0524],
-    spread: 0.012,
-    routeCount: 6,
-  },
-  {
-    name: "Vadapalani",
-    coordinate: [80.2120, 13.0510],
-    spread: 0.013,
-    routeCount: 5,
+    routeCount: 4,
   },
   {
     name: "Anna Nagar",
     coordinate: [80.2101, 13.0850],
     spread: 0.016,
-    routeCount: 5,
+    routeCount: 3,
   },
   {
     name: "Perambur",
     coordinate: [80.2430, 13.1184],
     spread: 0.015,
-    routeCount: 4,
+    routeCount: 3,
   },
   {
-    name: "Kolathur",
-    coordinate: [80.2140, 13.1240],
-    spread: 0.016,
-    routeCount: 4,
+    name: "Kodambakkam",
+    coordinate: [80.2290, 13.0524],
+    spread: 0.012,
+    routeCount: 3,
   },
   {
-    name: "Ambattur",
-    coordinate: [80.1540, 13.1140],
-    spread: 0.018,
-    routeCount: 4,
-  },
-  {
-    name: "Porur",
-    coordinate: [80.1570, 13.0350],
-    spread: 0.017,
-    routeCount: 4,
-  },
-  {
-    name: "Royapuram",
-    coordinate: [80.2940, 13.1130],
-    spread: 0.014,
+    name: "Guindy",
+    coordinate: [80.2209, 13.0108],
+    spread: 0.012,
     routeCount: 3,
   },
   {
     name: "Thiruvanmiyur",
     coordinate: [80.2595, 12.9850],
     spread: 0.015,
-    routeCount: 4,
+    routeCount: 2,
+  },
+  {
+    name: "Ambattur",
+    coordinate: [80.1540, 13.1140],
+    spread: 0.018,
+    routeCount: 2,
+  },
+  {
+    name: "Porur",
+    coordinate: [80.1570, 13.0350],
+    spread: 0.017,
+    routeCount: 2,
+  },
+  {
+    name: "Royapuram",
+    coordinate: [80.2940, 13.1130],
+    spread: 0.014,
+    routeCount: 2,
   },
   {
     name: "Pallikaranai",
     coordinate: [80.2090, 12.9390],
     spread: 0.018,
-    routeCount: 3,
+    routeCount: 2,
+  },
+  {
+    name: "Kolathur",
+    coordinate: [80.2140, 13.1240],
+    spread: 0.016,
+    routeCount: 2,
   },
 ];
 
@@ -323,7 +320,7 @@ const ROUTE_REQUESTS: RouteRequest[] =
           const nearby =
             distanceKm(
               origin,
-              YMCA_GROUND_GATE,
+              CHEPAUK_STADIUM_GATE,
             ) <= 4.5;
 
           const mode: TravelMode =
@@ -366,13 +363,13 @@ function createGroundPosition(
     0.94 + seeded(index, 203) * 0.06;
 
   return [
-    YMCA_EVENT_GROUND_CENTER[0] +
+    CHEPAUK_EVENT_GROUND_CENTER[0] +
       Math.cos(angle) *
         radius *
         GROUND_LONGITUDE_RADIUS *
         horizontalVariation,
 
-    YMCA_EVENT_GROUND_CENTER[1] +
+    CHEPAUK_EVENT_GROUND_CENTER[1] +
       Math.sin(angle) *
         radius *
         GROUND_LATITUDE_RADIUS *
@@ -428,7 +425,7 @@ function interpolateRoute(
   progress: number,
 ): [number, number] {
   if (coordinates.length === 0) {
-    return YMCA_GROUND_GATE;
+    return CHEPAUK_STADIUM_GATE;
   }
 
   if (coordinates.length === 1) {
@@ -578,8 +575,8 @@ async function loadRoutes(
   const finalWalkingRoute =
     await requestDirections(
       "walking",
-      NANDANAM_DROP_OFF,
-      YMCA_GROUND_GATE,
+      CHEPAUK_DROP_OFF,
+      CHEPAUK_STADIUM_GATE,
       token,
       signal,
     );
@@ -613,7 +610,7 @@ async function loadRoutes(
               await requestDirections(
                 "walking",
                 request.origin,
-                YMCA_GROUND_GATE,
+                CHEPAUK_STADIUM_GATE,
                 token,
                 signal,
               );
@@ -633,7 +630,7 @@ async function loadRoutes(
             await requestDirections(
               "driving",
               request.origin,
-              NANDANAM_DROP_OFF,
+              CHEPAUK_DROP_OFF,
               token,
               signal,
             );
@@ -681,7 +678,7 @@ function formatClock(
   minute: number,
 ) {
   const totalMinutes =
-    17 * 60 + minute;
+    16 * 60 + 30 + minute;
 
   const hours24 =
     Math.floor(totalMinutes / 60) %
@@ -700,7 +697,7 @@ function formatClock(
   }`;
 }
 
-export function YmcaRallySimulation() {
+export function ChepaukMatchSimulation() {
   const expectedCrowd =
     useAtlasStore(
       (state) =>
@@ -852,9 +849,9 @@ export function YmcaRallySimulation() {
        * 35,000 -> 700 dots
        */
       const visualCount = clamp(
-        Math.round(expectedCrowd / 40),
-        625,
-        875,
+        Math.round(expectedCrowd / 45),
+        650,
+        900,
       );
 
       const peoplePerAgent =
@@ -930,13 +927,13 @@ export function YmcaRallySimulation() {
 
           const intendedArrival =
             late
-              ? 150 +
+              ? 180 +
                 seeded(
                   index,
                   105,
                 ) *
                   30
-              : 70 +
+              : 95 +
                 seeded(
                   index,
                   105,
@@ -1063,8 +1060,8 @@ export function YmcaRallySimulation() {
               type: "Polygon",
               coordinates: [
                 [
-                  ...YMCA_OPEN_GROUND,
-                  YMCA_OPEN_GROUND[0],
+                  ...CHEPAUK_STADIUM_FOOTPRINT,
+                  CHEPAUK_STADIUM_FOOTPRINT[0],
                 ],
               ],
             },
@@ -1103,24 +1100,24 @@ export function YmcaRallySimulation() {
   return (
     <>
       <Source
-        id="ymca-open-ground"
+        id="chepauk-stadium-ground"
         type="geojson"
         data={groundGeoJson}
       >
         <Layer
-          id="ymca-open-ground-fill"
+          id="chepauk-stadium-ground-fill"
           type="fill"
           paint={{
-            "fill-color": "#22c55e",
+            "fill-color": "#facc15",
             "fill-opacity": 0.08,
           }}
         />
 
         <Layer
-          id="ymca-open-ground-outline"
+          id="chepauk-stadium-ground-outline"
           type="line"
           paint={{
-            "line-color": "#15803d",
+            "line-color": "#ca8a04",
             "line-width": 1.8,
             "line-opacity": 0.75,
           }}
@@ -1128,12 +1125,12 @@ export function YmcaRallySimulation() {
       </Source>
 
       <Source
-        id="ymca-rally-agents"
+        id="chepauk-match-agents"
         type="geojson"
         data={agentGeoJson}
       >
         <Layer
-          id="ymca-arrived-heat"
+          id="chepauk-arrived-heat"
           type="heatmap"
           filter={[
             "==",
@@ -1166,7 +1163,7 @@ export function YmcaRallySimulation() {
         />
 
         <Layer
-          id="ymca-rally-people"
+          id="chepauk-match-people"
           type="circle"
           paint={{
             "circle-radius": [
@@ -1187,7 +1184,7 @@ export function YmcaRallySimulation() {
                 ["get", "state"],
                 "arrived",
               ],
-              "#ef4444",
+              "#facc15",
               [
                 "==",
                 ["get", "state"],
@@ -1224,7 +1221,7 @@ export function YmcaRallySimulation() {
         <strong>
           {routeStatus ===
           "loading"
-            ? "Generating Chennai home routes"
+            ? "Generating IPL spectator routes"
             : routeStatus ===
                 "error"
               ? "Routing unavailable"
@@ -1233,7 +1230,7 @@ export function YmcaRallySimulation() {
                 ? `Simulation · ${formatClock(
                     minute,
                   )}`
-                : `YMCA rally · ${formatClock(
+                : `Chepauk IPL match · ${formatClock(
                     minute,
                   )}`}
         </strong>
@@ -1244,14 +1241,14 @@ export function YmcaRallySimulation() {
                 "en-IN",
               )} / ${expectedCrowd.toLocaleString(
                 "en-IN",
-              )} inside YMCA ground · ${agents.length} visible groups`
+              )} inside Chepauk stadium · ${agents.length} visible groups`
             : routeError ??
               "Loading unique road-snapped starting locations"}
         </span>
 
-        {minute >= 150 && (
+        {minute >= 180 && (
           <b>
-            EVENT STARTED · 7:30 PM
+            IPL MATCH STARTED · 7:30 PM
           </b>
         )}
       </div>

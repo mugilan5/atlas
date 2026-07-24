@@ -20,7 +20,7 @@ export type MapLayerId =
   | "cctv-cameras";
 
 export type ScenarioConfig = {
-  scenarioType: "political-rally";
+  scenarioType: "political-rally" | "ipl-match";
   location: string;
   expectedCrowd: number;
   startTime: string;

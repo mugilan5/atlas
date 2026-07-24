@@ -20,6 +20,10 @@ import { useState } from "react";
 
 import { AtlasMap } from "@/components/map/atlas-map";
 import {
+  CHEPAUK_IPL_SCENARIO,
+  YMCA_RALLY_SCENARIO,
+} from "@/data/scenario";
+import {
   formatSimulationTime,
   metricClass,
   riskLabel,
@@ -93,6 +97,36 @@ export function OverviewSection() {
     store.scenario.expectedCrowd,
   );
 
+  const isIplMatch =
+    store.scenario.scenarioType ===
+    "ipl-match";
+
+  const crowdMin = isIplMatch
+    ? 28_000
+    : 25_000;
+
+  const crowdMax = isIplMatch
+    ? 38_000
+    : 35_000;
+
+  const scenarioTitle = isIplMatch
+    ? "IPL Cricket Match"
+    : "Political Party Rally";
+
+  const venueName = isIplMatch
+    ? "M. A. Chidambaram Stadium"
+    : "YMCA Grounds, Nandanam";
+
+  const arrivalDescription =
+    isIplMatch
+      ? "MRTS + bus + road + walking"
+      : "Public transport + walking";
+
+  const helperDescription =
+    isIplMatch
+      ? "28k–38k spectators · match starts at 7:30 PM"
+      : "25k–35k rally · event starts at 7:30 PM";
+
   const suggestedResources =
     calculateSuggestedResources(
       store.metrics,
@@ -100,11 +134,30 @@ export function OverviewSection() {
       store.status,
     );
 
+  function selectScenario(
+    type:
+      | "political-rally"
+      | "ipl-match",
+  ) {
+    const nextScenario =
+      type === "ipl-match"
+        ? CHEPAUK_IPL_SCENARIO
+        : YMCA_RALLY_SCENARIO;
+
+    setPopulationDraft(
+      nextScenario.expectedCrowd,
+    );
+
+    store.updateScenario({
+      ...nextScenario,
+    });
+  }
+
   function simulateWithPopulation() {
     const clamped = Math.min(
-      35_000,
+      crowdMax,
       Math.max(
-        25_000,
+        crowdMin,
         populationDraft,
       ),
     );
@@ -127,10 +180,43 @@ export function OverviewSection() {
           title="Live Configuration"
         />
 
-        <Field
-          label="Scenario Type"
-          value="Political Party Rally"
-        />
+        <div className="scenario-field">
+          <span>Scenario Type</span>
+
+          <div className="scenario-switcher">
+            <button
+              type="button"
+              className={
+                !isIplMatch
+                  ? "active"
+                  : ""
+              }
+              onClick={() =>
+                selectScenario(
+                  "political-rally",
+                )
+              }
+            >
+              YMCA Rally
+            </button>
+
+            <button
+              type="button"
+              className={
+                isIplMatch
+                  ? "active"
+                  : ""
+              }
+              onClick={() =>
+                selectScenario(
+                  "ipl-match",
+                )
+              }
+            >
+              Chepauk IPL
+            </button>
+          </div>
+        </div>
 
         <Field
           label="Location"
@@ -150,8 +236,8 @@ export function OverviewSection() {
           >
             <input
               type="number"
-              min={25000}
-              max={35000}
+              min={crowdMin}
+              max={crowdMax}
               step={1000}
               value={populationDraft}
               onChange={(event) =>
@@ -204,7 +290,7 @@ export function OverviewSection() {
             <div>
               <dt>Event</dt>
               <dd>
-                Political Party Rally
+                {scenarioTitle}
               </dd>
             </div>
 
@@ -218,15 +304,14 @@ export function OverviewSection() {
             <div>
               <dt>Travel</dt>
               <dd>
-                Public transport +
-                walking
+                {arrivalDescription}
               </dd>
             </div>
 
             <div>
               <dt>Venue</dt>
               <dd>
-                YMCA Grounds, Nandanam
+                {venueName}
               </dd>
             </div>
           </dl>
@@ -252,8 +337,7 @@ export function OverviewSection() {
         </button>
 
         <small className="helper-text">
-          25k–35k rally · road-routed
-          arrivals · event at 7:30 PM
+          {helperDescription}
         </small>
 
         <div className="data-source-row">
@@ -350,11 +434,23 @@ export function OverviewSection() {
               />
 
               <div className="timeline-labels">
-                <span>05:00 PM</span>
-                <span>06:00 PM</span>
-                <span>07:00 PM</span>
-                <span>08:00 PM</span>
-                <span>09:00 PM</span>
+                {isIplMatch ? (
+                  <>
+                    <span>04:30 PM</span>
+                    <span>05:45 PM</span>
+                    <span>07:00 PM</span>
+                    <span>08:15 PM</span>
+                    <span>09:30 PM</span>
+                  </>
+                ) : (
+                  <>
+                    <span>05:00 PM</span>
+                    <span>06:00 PM</span>
+                    <span>07:00 PM</span>
+                    <span>08:00 PM</span>
+                    <span>09:00 PM</span>
+                  </>
+                )}
               </div>
             </div>
           </div>

@@ -3,15 +3,12 @@
 import Image from "next/image";
 import {
   Activity,
-  Bell,
   Boxes,
   BrainCircuit,
   ChevronDown,
   FileText,
   Grid2X2,
-  MapPinned,
   Play,
-  Settings,
   ShieldCheck,
 } from "lucide-react";
 import { AssetsSection } from "@/components/sections/assets";
@@ -53,7 +50,6 @@ export function AtlasApp() {
             className="global-brand-logo"
             priority
           />
-          <span>Chennai Digital Twin</span>
         </button>
         <nav className="top-navigation" aria-label="Primary navigation">
           {navItems.map((item) => (
@@ -68,13 +64,10 @@ export function AtlasApp() {
 
       <aside className="icon-rail">
         <button className={activeView === "overview" ? "active" : ""} onClick={() => setActiveView("overview")}><Grid2X2 size={17} /></button>
-        <button onClick={() => setActiveView("overview")}><MapPinned size={17} /></button>
         <button onClick={() => setActiveView("assets")}><Boxes size={17} /></button>
         <button onClick={() => setActiveView("intelligence")}><BrainCircuit size={17} /></button>
-        <button><Bell size={17} /></button>
         <button onClick={() => setActiveView("reports")}><FileText size={17} /></button>
         <div className="rail-spacer" />
-        <button><Settings size={17} /></button>
       </aside>
 
       <section className="view-container">

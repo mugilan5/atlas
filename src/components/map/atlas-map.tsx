@@ -1,17 +1,27 @@
 "use client";
 
 import { useState } from "react";
+
 import Map, {
   NavigationControl,
   ScaleControl,
 } from "react-map-gl/mapbox";
+
+import { ChepaukMatchSimulation } from "@/components/map/chepauk-match-simulation";
 import { YmcaRallySimulation } from "@/components/map/ymca-rally-simulation";
-import { YMCA_RALLY_CENTER } from "@/data/scenario";
+import { useAtlasStore } from "@/store/use-atlas-store";
 
-type MapViewStyle = "normal" | "satellite";
+type MapViewStyle =
+  | "normal"
+  | "satellite";
 
-const MAP_STYLES: Record<MapViewStyle, string> = {
-  normal: "mapbox://styles/mapbox/streets-v12",
+const MAP_STYLES: Record<
+  MapViewStyle,
+  string
+> = {
+  normal:
+    "mapbox://styles/mapbox/streets-v12",
+
   satellite:
     "mapbox://styles/mapbox/satellite-streets-v12",
 };
@@ -24,18 +34,46 @@ const YMCA_VIEW = {
   bearing: 0,
 };
 
+const CHEPAUK_VIEW = {
+  longitude: 80.266,
+  latitude: 13.067,
+  zoom: 11.4,
+  pitch: 0,
+  bearing: 0,
+};
+
 export function AtlasMap() {
-  const [mapViewStyle, setMapViewStyle] =
-    useState<MapViewStyle>("normal");
+  const [
+    mapViewStyle,
+    setMapViewStyle,
+  ] = useState<MapViewStyle>(
+    "normal",
+  );
+
+  const scenarioType =
+    useAtlasStore(
+      (state) =>
+        state.scenario.scenarioType,
+    );
 
   const token =
-    process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
+    process.env
+      .NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
+
+  const isIplMatch =
+    scenarioType === "ipl-match";
+
+  const initialViewState =
+    isIplMatch
+      ? CHEPAUK_VIEW
+      : YMCA_VIEW;
 
   if (!token) {
     return (
       <div className="map-token-error">
         Mapbox token is missing. Add
-        NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN to .env.local.
+        NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
+        to .env.local.
       </div>
     );
   }
@@ -43,10 +81,14 @@ export function AtlasMap() {
   return (
     <div className="real-chennai-map">
       <Map
-        key={mapViewStyle}
-        initialViewState={YMCA_VIEW}
+        key={`${mapViewStyle}-${scenarioType}`}
+        initialViewState={
+          initialViewState
+        }
         mapboxAccessToken={token}
-        mapStyle={MAP_STYLES[mapViewStyle]}
+        mapStyle={
+          MAP_STYLES[mapViewStyle]
+        }
         style={{
           position: "absolute",
           inset: 0,
@@ -75,7 +117,11 @@ export function AtlasMap() {
           unit="metric"
         />
 
-        <YmcaRallySimulation />
+        {isIplMatch ? (
+          <ChepaukMatchSimulation />
+        ) : (
+          <YmcaRallySimulation />
+        )}
       </Map>
 
       <div
@@ -105,7 +151,9 @@ export function AtlasMap() {
               : ""
           }
           onClick={() =>
-            setMapViewStyle("satellite")
+            setMapViewStyle(
+              "satellite",
+            )
           }
         >
           Satellite

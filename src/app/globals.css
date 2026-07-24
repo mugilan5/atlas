@@ -2698,3 +2698,938 @@ select {
 
 /* ATLAS_INTELLIGENCE_UI_V2_END */
 
+/* ATLAS_CHEPAUK_SCENARIO_START */
+
+.scenario-switcher {
+  width: 100%;
+  min-height: 42px !important;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px !important;
+  padding: 4px !important;
+}
+
+.scenario-switcher button {
+  min-width: 0;
+  min-height: 32px;
+  padding: 5px 6px;
+  border: 1px solid #d7dde5;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.scenario-switcher button:hover {
+  border-color: #94a3b8;
+  color: #111827;
+}
+
+.scenario-switcher button.active {
+  border-color: #111827;
+  background: #111827;
+  color: #ffffff;
+}
+
+.scenario-preset-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.scenario-preset-card {
+  min-height: 105px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 7px;
+  padding: 15px;
+  border: 1px solid #d7dde5;
+  border-radius: 0;
+  background: #ffffff;
+  color: #111827;
+  text-align: left;
+}
+
+.scenario-preset-card:hover {
+  border-color: #94a3b8;
+  background: #f8fafc;
+}
+
+.scenario-preset-card.active {
+  border-color: #111827;
+  box-shadow:
+    inset 3px 0 0 #dc2626;
+}
+
+.scenario-preset-card > span {
+  color: #dc2626;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.scenario-preset-card > strong {
+  font-size: 15px;
+  line-height: 1.3;
+}
+
+.scenario-preset-card > small {
+  color: #64748b;
+  font-size: 11px;
+}
+
+@media (max-width: 700px) {
+  .scenario-preset-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ATLAS_CHEPAUK_SCENARIO_END */
+
+/* ATLAS_SCENARIO_PANEL_UI_START */
+
+/* Main scenario panel */
+
+.scenario-panel {
+  gap: 14px !important;
+  padding: 16px !important;
+  overflow-y: auto;
+  background:
+    linear-gradient(180deg, #ffffff 0%, #fafbfc 100%) !important;
+}
+
+.scenario-panel .panel-header {
+  padding-bottom: 12px;
+  border-bottom: 1px solid #d9e0e7;
+}
+
+.scenario-panel .panel-header span {
+  color: #7a8794 !important;
+  font-size: 9px !important;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+}
+
+.scenario-panel .panel-header strong {
+  color: #111827;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+/* Field labels */
+
+.scenario-panel .scenario-field {
+  display: grid;
+  gap: 7px;
+}
+
+.scenario-panel .scenario-field > span {
+  color: #66717d !important;
+  font-size: 8px !important;
+  font-weight: 750;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+/* Field containers */
+
+.scenario-panel .scenario-field > div {
+  min-height: 42px;
+  padding: 7px 10px;
+  border: 1px solid #ced6df !important;
+  border-radius: 5px;
+  background: #ffffff !important;
+  color: #1f2937 !important;
+  font-size: 10px;
+  line-height: 1.35;
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    background 120ms ease;
+}
+
+.scenario-panel .scenario-field > div:hover {
+  border-color: #9ba8b5 !important;
+  background: #fbfcfd !important;
+}
+
+.scenario-panel .scenario-field input,
+.scenario-panel .scenario-field select {
+  min-width: 0;
+  min-height: 34px;
+  border: 1px solid #c8d1dc !important;
+  border-radius: 4px;
+  background: #f8fafc !important;
+  color: #111827 !important;
+  padding: 0 9px;
+  font-size: 10px;
+  outline: none;
+}
+
+.scenario-panel .scenario-field input:focus,
+.scenario-panel .scenario-field select:focus {
+  border-color: #111827 !important;
+  box-shadow: 0 0 0 2px rgba(17, 24, 39, 0.08);
+}
+
+/* Scenario type segmented selector */
+
+.scenario-type-switch,
+.scenario-selector,
+.scenario-toggle {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px !important;
+  min-height: auto !important;
+  padding: 4px !important;
+  border: 1px solid #d3dae3 !important;
+  border-radius: 6px;
+  background: #f4f6f8 !important;
+}
+
+.scenario-type-switch button,
+.scenario-selector button,
+.scenario-toggle button {
+  min-height: 34px;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: #53606d;
+  font-size: 9px;
+  font-weight: 700;
+  transition: 120ms ease;
+}
+
+.scenario-type-switch button:hover,
+.scenario-selector button:hover,
+.scenario-toggle button:hover {
+  background: #ffffff;
+  color: #111827;
+}
+
+.scenario-type-switch button.active,
+.scenario-selector button.active,
+.scenario-toggle button.active {
+  border-color: #111827;
+  background: #111827;
+  color: #ffffff;
+  box-shadow: 0 2px 5px rgba(15, 23, 42, 0.18);
+}
+
+/* Population row */
+
+.scenario-panel .scenario-field > div:has(input[type="number"]) {
+  gap: 7px !important;
+  padding: 5px !important;
+}
+
+.scenario-panel .scenario-field > div:has(input[type="number"]) input {
+  flex: 1;
+  width: 100%;
+  min-height: 34px;
+}
+
+.scenario-panel .scenario-field > div:has(input[type="number"]) .primary-light-button {
+  width: auto;
+  min-width: 72px;
+  min-height: 34px;
+  margin: 0 !important;
+  padding: 0 11px;
+  border-radius: 4px;
+  background: #111827 !important;
+  color: #ffffff !important;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.scenario-panel .scenario-field > div:has(input[type="number"]) .primary-light-button:hover {
+  background: #303944 !important;
+  transform: none;
+}
+
+/* Two-column time fields */
+
+.scenario-panel .two-column-fields {
+  gap: 8px;
+}
+
+.scenario-panel .two-column-fields .scenario-field > div {
+  justify-content: flex-start;
+  font-weight: 650;
+}
+
+/* Weather */
+
+.scenario-panel .scenario-field svg {
+  color: #475569;
+  flex: 0 0 auto;
+}
+
+/* Event details card */
+
+.scenario-panel .scenario-detail-box {
+  margin-top: 1px;
+  padding: 13px;
+  border: 1px solid #d2dae3 !important;
+  border-radius: 6px;
+  background:
+    linear-gradient(145deg, #f8fafc 0%, #ffffff 100%) !important;
+}
+
+.scenario-panel .scenario-detail-box > span {
+  display: block;
+  padding-bottom: 9px;
+  border-bottom: 1px solid #e4e9ef;
+  color: #66717d !important;
+  font-size: 8px !important;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+}
+
+.scenario-panel .scenario-detail-box dl {
+  gap: 0;
+  margin: 7px 0 0;
+}
+
+.scenario-panel .scenario-detail-box dl div {
+  min-height: 29px;
+  display: grid;
+  grid-template-columns: 65px minmax(0, 1fr);
+  align-items: center;
+  gap: 9px;
+  border-bottom: 1px solid #edf1f5;
+  font-size: 9px;
+}
+
+.scenario-panel .scenario-detail-box dl div:last-child {
+  border-bottom: 0;
+}
+
+.scenario-panel .scenario-detail-box dt {
+  color: #7a8794 !important;
+  font-size: 8px;
+}
+
+.scenario-panel .scenario-detail-box dd {
+  margin: 0;
+  color: #26313d !important;
+  font-size: 8px;
+  font-weight: 650;
+  line-height: 1.3;
+  text-align: right;
+}
+
+/* Bring the run control closer to the configuration */
+
+.scenario-panel > .primary-light-button {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 4px !important;
+  border-radius: 5px;
+  background: #111827 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.15);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  transition:
+    background 120ms ease,
+    transform 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.scenario-panel > .primary-light-button:hover {
+  background: #28313b !important;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 13px rgba(15, 23, 42, 0.18);
+}
+
+.scenario-panel > .primary-light-button:active {
+  transform: translateY(0);
+}
+
+/* Helper and source-status areas */
+
+.scenario-panel .helper-text {
+  margin-top: -5px;
+  color: #7a8794 !important;
+  font-size: 8px;
+  line-height: 1.45;
+}
+
+.scenario-panel .data-source-row {
+  margin-top: 1px;
+  padding: 10px 2px 0;
+  border-top: 1px solid #e0e6ec;
+  color: #64748b;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+}
+
+/* Prevent the button from being pushed to the very bottom */
+
+.scenario-panel .primary-light-button {
+  margin-top: 0;
+}
+
+.scenario-panel {
+  justify-content: flex-start !important;
+}
+
+/* Cleaner scrollbar */
+
+.scenario-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scenario-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scenario-panel::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: #cbd3dc;
+}
+
+.scenario-panel::-webkit-scrollbar-thumb:hover {
+  background: #aeb8c3;
+}
+
+@media (max-width: 1100px) {
+  .scenario-panel {
+    padding: 13px !important;
+  }
+
+  .scenario-panel .two-column-fields {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ATLAS_SCENARIO_PANEL_UI_END */
+
+/* ATLAS_NAV_RAIL_UI_START */
+
+/* Increase space reserved for the improved navigation rail */
+
+.atlas-app-shell {
+  grid-template-columns: 68px minmax(0, 1fr) !important;
+}
+
+/* Main sidebar container */
+
+.icon-rail {
+  position: relative;
+  grid-column: 1 !important;
+  width: 68px;
+  padding: 12px 9px !important;
+  gap: 8px !important;
+  align-items: center;
+  overflow: visible;
+  border-right: 1px solid #d7dde5 !important;
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #f8fafc 100%
+    ) !important;
+  box-shadow:
+    2px 0 10px rgba(15, 23, 42, 0.035);
+}
+
+/* Subtle visual line inside rail */
+
+.icon-rail::before {
+  position: absolute;
+  top: 13px;
+  bottom: 13px;
+  left: 50%;
+  width: 46px;
+  content: "";
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.55);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+/* Navigation buttons */
+
+.icon-rail button {
+  position: relative;
+  z-index: 2;
+  display: grid !important;
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px;
+  place-items: center;
+  padding: 0 !important;
+  overflow: visible;
+  border: 1px solid transparent !important;
+  border-radius: 10px;
+  background: transparent !important;
+  color: #64748b !important;
+  transition:
+    color 140ms ease,
+    background 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    transform 140ms ease;
+}
+
+/* Make icons more readable */
+
+.icon-rail button svg {
+  width: 19px;
+  height: 19px;
+  stroke-width: 1.8;
+  transition: transform 140ms ease;
+}
+
+/* Hover state */
+
+.icon-rail button:hover {
+  border-color: #d7dee7 !important;
+  background: #f1f5f9 !important;
+  color: #111827 !important;
+  box-shadow:
+    0 3px 8px rgba(15, 23, 42, 0.08);
+  transform: translateY(-1px);
+}
+
+.icon-rail button:hover svg {
+  transform: scale(1.06);
+}
+
+/* Active page */
+
+.icon-rail button.active {
+  border-color: #111827 !important;
+  background: #111827 !important;
+  color: #ffffff !important;
+  box-shadow:
+    0 5px 12px rgba(15, 23, 42, 0.22);
+}
+
+/* Active page indicator */
+
+.icon-rail button.active::before {
+  position: absolute;
+  top: 50%;
+  left: -10px;
+  width: 3px;
+  height: 22px;
+  content: "";
+  border-radius: 0 4px 4px 0;
+  background: #111827;
+  transform: translateY(-50%);
+}
+
+/* Hover label tooltip.
+   It uses aria-label or title from the existing buttons. */
+
+.icon-rail button::after {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 11px);
+  z-index: 1000;
+  display: block;
+  width: max-content;
+  max-width: 180px;
+  padding: 7px 9px;
+  visibility: hidden;
+  border: 1px solid #26313d;
+  border-radius: 6px;
+  background: #111827;
+  color: #ffffff;
+  box-shadow:
+    0 8px 18px rgba(15, 23, 42, 0.22);
+  content: attr(aria-label);
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform:
+    translateY(-50%)
+    translateX(-4px);
+  transition:
+    opacity 120ms ease,
+    transform 120ms ease,
+    visibility 120ms ease;
+}
+
+.icon-rail button:hover::after,
+.icon-rail button:focus-visible::after {
+  visibility: visible;
+  opacity: 1;
+  transform:
+    translateY(-50%)
+    translateX(0);
+}
+
+/* Tooltip arrow */
+
+.icon-rail button:hover {
+  z-index: 50;
+}
+
+/* Keyboard accessibility */
+
+.icon-rail button:focus-visible {
+  outline: 2px solid #64748b;
+  outline-offset: 2px;
+}
+
+/* Separate bottom settings/control area */
+
+.icon-rail .rail-spacer {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  min-height: 22px;
+}
+
+.icon-rail .rail-spacer::after {
+  position: absolute;
+  right: -17px;
+  bottom: 2px;
+  left: -17px;
+  height: 1px;
+  content: "";
+  background: #e2e8f0;
+}
+
+/* Last rail button gets a slightly different settings appearance */
+
+.icon-rail button:last-child {
+  margin-top: 2px;
+  border-color: #d9e0e7 !important;
+  background: #ffffff !important;
+  color: #475569 !important;
+}
+
+.icon-rail button:last-child:hover {
+  border-color: #111827 !important;
+  background: #111827 !important;
+  color: #ffffff !important;
+}
+
+/* Keep main content aligned after increasing rail width */
+
+.global-header {
+  grid-column: 1 / 3 !important;
+}
+
+.view-container {
+  grid-column: 2 !important;
+}
+
+/* Remove overlapping Mapbox compass visible near bottom-left */
+
+.mapboxgl-ctrl-compass {
+  display: none !important;
+}
+
+/* Keep other Mapbox controls away from the sidebar */
+
+.mapboxgl-ctrl-bottom-left,
+.mapboxgl-ctrl-top-left {
+  left: 8px !important;
+}
+
+/* Mobile: turn rail into a compact bottom navigation */
+
+@media (max-width: 760px) {
+  .atlas-app-shell {
+    grid-template-columns: 1fr !important;
+    grid-template-rows:
+      auto
+      minmax(0, 1fr)
+      60px !important;
+  }
+
+  .view-container {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    padding-bottom: 4px;
+  }
+
+  .icon-rail {
+    position: sticky;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    grid-column: 1 !important;
+    grid-row: 3 !important;
+    width: 100%;
+    height: 60px;
+    flex-direction: row !important;
+    justify-content: center;
+    gap: 5px !important;
+    padding: 7px 9px !important;
+    border-top: 1px solid #d7dde5 !important;
+    border-right: 0 !important;
+    box-shadow:
+      0 -4px 14px rgba(15, 23, 42, 0.08);
+  }
+
+  .icon-rail::before {
+    display: none;
+  }
+
+  .icon-rail button {
+    width: 42px !important;
+    height: 42px !important;
+  }
+
+  .icon-rail button.active::before {
+    top: auto;
+    right: 9px;
+    bottom: -7px;
+    left: 9px;
+    width: auto;
+    height: 3px;
+    transform: none;
+  }
+
+  .icon-rail button::after {
+    top: auto;
+    right: auto;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform:
+      translateX(-50%)
+      translateY(4px);
+  }
+
+  .icon-rail button:hover::after,
+  .icon-rail button:focus-visible::after {
+    transform:
+      translateX(-50%)
+      translateY(0);
+  }
+
+  .icon-rail .rail-spacer {
+    display: none;
+  }
+
+  .icon-rail button:last-child {
+    margin-top: 0;
+  }
+}
+
+/* ATLAS_NAV_RAIL_UI_END */
+
+/* ATLAS_HEADER_FLAT_START */
+
+.global-header {
+  height: 58px !important;
+  display: flex;
+  align-items: stretch;
+  gap: 22px;
+  padding: 0 18px !important;
+  border-bottom: 1px solid #dfe4ea !important;
+  background: #ffffff !important;
+  box-shadow: none !important;
+}
+
+.global-brand {
+  width: 124px;
+  min-width: 124px;
+  height: 100% !important;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+.global-brand-logo {
+  width: auto;
+  height: 31px;
+  object-fit: contain;
+}
+
+.top-navigation {
+  height: 100% !important;
+  display: flex;
+  align-items: stretch;
+  gap: 26px;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+
+.top-navigation button {
+  position: relative;
+  min-width: auto !important;
+  height: 100% !important;
+  padding: 1px 0 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: #667085 !important;
+  font-size: 12px !important;
+  font-weight: 500;
+  letter-spacing: 0;
+  box-shadow: none !important;
+  transform: none !important;
+  transition:
+    color 150ms ease,
+    background 150ms ease;
+}
+
+.top-navigation button:hover {
+  background: transparent !important;
+  color: #111827 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.top-navigation button.active {
+  background: transparent !important;
+  color: #111827 !important;
+  font-weight: 650;
+  box-shadow: none !important;
+}
+
+.top-navigation button.active::after {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: block !important;
+  height: 2px;
+  content: "";
+  background: #111827 !important;
+}
+
+.header-actions {
+  height: 100%;
+  margin-left: auto !important;
+  display: flex;
+  align-items: center;
+}
+
+.header-actions button {
+  height: 34px !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 11px !important;
+  border: 1px solid #d9dee5 !important;
+  border-radius: 4px !important;
+  background: #ffffff !important;
+  color: #4b5563 !important;
+  font-size: 10px !important;
+  font-weight: 500;
+  box-shadow: none !important;
+  transition:
+    border-color 150ms ease,
+    background 150ms ease,
+    color 150ms ease;
+}
+
+.header-actions button:hover {
+  border-color: #aeb7c2 !important;
+  background: #f8fafc !important;
+  color: #111827 !important;
+  box-shadow: none !important;
+}
+
+.header-actions button svg:first-child {
+  color: #475569 !important;
+}
+
+.header-actions button svg:last-child {
+  width: 12px;
+  height: 12px;
+  color: #94a3b8 !important;
+}
+
+/* Slight divider between logo and navigation */
+
+.global-brand::after {
+  width: 1px;
+  height: 24px;
+  margin-left: auto;
+  content: "";
+  background: #e5e7eb;
+}
+
+/* Keep dashboard content aligned with the shorter header */
+
+.atlas-app-shell {
+  grid-template-rows: 58px minmax(0, 1fr) !important;
+}
+
+.view-container {
+  grid-row: 2 !important;
+}
+
+.icon-rail {
+  grid-row: 2 !important;
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
+  .global-header {
+    gap: 14px;
+    padding: 0 12px !important;
+  }
+
+  .global-brand {
+    width: 96px;
+    min-width: 96px;
+  }
+
+  .global-brand-logo {
+    height: 27px;
+  }
+
+  .top-navigation {
+    flex: 1;
+    gap: 18px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .top-navigation::-webkit-scrollbar {
+    display: none;
+  }
+
+  .top-navigation button {
+    flex: 0 0 auto;
+    font-size: 11px !important;
+  }
+
+  .header-actions button span {
+    display: none;
+  }
+
+  .header-actions button {
+    width: 34px;
+    padding: 0 !important;
+  }
+
+  .header-actions button svg:last-child {
+    display: none;
+  }
+}
+
+/* ATLAS_HEADER_FLAT_END */
+
