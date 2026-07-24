@@ -1177,3 +1177,87 @@ select {
   border: 1px solid #fecaca;
   text-align: center;
 }
+
+/* Remove leftover status-bar spacing and border */
+.global-status-bar {
+  display: none !important;
+  border: 0 !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.view-container {
+  border-top: 0 !important;
+}
+
+.atlas-app-shell {
+  border-top: 0 !important;
+}
+
+/* Fill the space left by the removed global status bar */
+.atlas-app-shell {
+  grid-template-rows: auto 1fr !important;
+}
+
+.view-container {
+  grid-row: 2 !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  border-top: 0 !important;
+}
+
+.overview-layout {
+  height: 100% !important;
+  min-height: 0 !important;
+}
+
+/* YMCA rally simulation */
+.ymca-simulation-status {
+  position: absolute;
+  left: 12px;
+  bottom: 42px;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  min-width: 220px;
+  gap: 3px;
+  padding: 9px 11px;
+  background: rgba(255, 255, 255, 0.96);
+  color: #111827;
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.16);
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+}
+
+.ymca-simulation-status strong {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.ymca-simulation-status span {
+  color: #64748b;
+  font-size: 10px;
+}
+
+.ymca-simulation-status b {
+  margin-top: 2px;
+  color: #dc2626;
+  font-size: 9px;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 700px) {
+  .ymca-simulation-status {
+    left: 8px;
+    bottom: 38px;
+    min-width: 180px;
+    max-width: calc(100% - 70px);
+    padding: 7px 9px;
+  }
+}

@@ -77,12 +77,6 @@ export function AtlasApp() {
         <button><Settings size={17} /></button>
       </aside>
 
-      <div className="global-status-bar">
-        <span><i className={`status-indicator ${status}`} />SYSTEM {status.toUpperCase()}</span>
-        <span>MODEL: ATLAS-ABM-01</span>
-        <span>DATA: SYNTHETIC</span>
-      </div>
-
       <section className="view-container">
         {activeView === "overview" && <OverviewSection />}
         {activeView === "simulations" && <SimulationsSection />}

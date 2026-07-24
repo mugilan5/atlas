@@ -31,10 +31,11 @@ function interpolateRoute(route: Array<[number, number]>, progress: number): [nu
 
 function transportMode(index: number): TransportMode {
   const value = seeded(index + 300);
-  if (value < 0.38) return "metro";
-  if (value < 0.7) return "bus";
-  if (value < 0.9) return "car";
-  return "auto";
+
+  // Rally attendees use public transport or walk.
+  if (value < 0.55) return "bus";
+  if (value < 0.82) return "metro";
+  return "walk";
 }
 
 export function createAgents(config: ScenarioConfig = DEFAULT_SCENARIO, count = 1000): Agent[] {
@@ -46,8 +47,8 @@ export function createAgents(config: ScenarioConfig = DEFAULT_SCENARIO, count = 
       id: index,
       routeId,
       progress,
-      departureMinute: Math.floor(seeded(index + 20) * 145),
-      speed: 0.0033 + seeded(index + 30) * 0.0035,
+      departureMinute: Math.floor(seeded(index + 20) * 115),
+      speed: 0.006 + seeded(index + 30) * 0.0045,
       weight,
       transportMode: transportMode(index),
       coordinate: interpolateRoute(ROUTES[routeId], progress),
@@ -94,7 +95,7 @@ export function advanceAgents(
   });
 }
 
-const BASELINE_POPULATION = 120_000;
+const BASELINE_POPULATION = 30_000;
 
 export function calculateMetrics(
   minute: number,

@@ -5,20 +5,21 @@ import Map, {
   NavigationControl,
   ScaleControl,
 } from "react-map-gl/mapbox";
-
-import { RealisticCrowd } from "@/components/map/realistic-crowd";
+import { YmcaRallySimulation } from "@/components/map/ymca-rally-simulation";
+import { YMCA_RALLY_CENTER } from "@/data/scenario";
 
 type MapViewStyle = "normal" | "satellite";
 
 const MAP_STYLES: Record<MapViewStyle, string> = {
   normal: "mapbox://styles/mapbox/streets-v12",
-  satellite: "mapbox://styles/mapbox/satellite-streets-v12",
+  satellite:
+    "mapbox://styles/mapbox/satellite-streets-v12",
 };
 
-const CHENNAI_VIEW = {
-  longitude: 80.2824,
-  latitude: 13.0507,
-  zoom: 14.2,
+const YMCA_VIEW = {
+  longitude: 80.225,
+  latitude: 13.055,
+  zoom: 10.9,
   pitch: 0,
   bearing: 0,
 };
@@ -27,7 +28,8 @@ export function AtlasMap() {
   const [mapViewStyle, setMapViewStyle] =
     useState<MapViewStyle>("normal");
 
-  const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
+  const token =
+    process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
 
   if (!token) {
     return (
@@ -42,7 +44,7 @@ export function AtlasMap() {
     <div className="real-chennai-map">
       <Map
         key={mapViewStyle}
-        initialViewState={CHENNAI_VIEW}
+        initialViewState={YMCA_VIEW}
         mapboxAccessToken={token}
         mapStyle={MAP_STYLES[mapViewStyle]}
         style={{
@@ -53,8 +55,13 @@ export function AtlasMap() {
         }}
         attributionControl
         reuseMaps={false}
+        minZoom={10}
+        maxZoom={18}
         onError={(event) => {
-          console.error("Mapbox error:", event.error);
+          console.error(
+            "Mapbox map error:",
+            event.error,
+          );
         }}
       >
         <NavigationControl
@@ -68,7 +75,7 @@ export function AtlasMap() {
           unit="metric"
         />
 
-        <RealisticCrowd />
+        <YmcaRallySimulation />
       </Map>
 
       <div
@@ -78,16 +85,28 @@ export function AtlasMap() {
       >
         <button
           type="button"
-          className={mapViewStyle === "normal" ? "active" : ""}
-          onClick={() => setMapViewStyle("normal")}
+          className={
+            mapViewStyle === "normal"
+              ? "active"
+              : ""
+          }
+          onClick={() =>
+            setMapViewStyle("normal")
+          }
         >
           Map
         </button>
 
         <button
           type="button"
-          className={mapViewStyle === "satellite" ? "active" : ""}
-          onClick={() => setMapViewStyle("satellite")}
+          className={
+            mapViewStyle === "satellite"
+              ? "active"
+              : ""
+          }
+          onClick={() =>
+            setMapViewStyle("satellite")
+          }
         >
           Satellite
         </button>

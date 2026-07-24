@@ -28,7 +28,7 @@ export function OverviewSection() {
   const [populationDraft, setPopulationDraft] = useState(store.scenario.expectedCrowd);
 
   function simulateWithPopulation() {
-    const clamped = Math.min(500_000, Math.max(5_000, populationDraft));
+    const clamped = Math.min(35_000, Math.max(25_000, populationDraft));
     setPopulationDraft(clamped);
     store.updateScenario({ ...store.scenario, expectedCrowd: clamped });
     store.start();
@@ -39,16 +39,16 @@ export function OverviewSection() {
       <aside className="scenario-panel panel">
         <PanelHeader eyebrow="SCENARIO" title="Live Configuration" />
 
-        <Field label="Scenario Type" value="Political Rally · Public Event" />
+        <Field label="Scenario Type" value="Political Party Rally" />
         <Field label="Location" value={store.scenario.location} />
         <div className="scenario-field">
           <span>Population (Expected Crowd)</span>
           <div style={{ display: "flex", gap: "8px" }}>
             <input
               type="number"
-              min={5000}
-              max={500000}
-              step={5000}
+              min={25000}
+              max={35000}
+              step={1000}
               value={populationDraft}
               onChange={(event: { target: { value: string } }) => setPopulationDraft(Number(event.target.value))}
               style={{ flex: 1 }}
@@ -59,8 +59,8 @@ export function OverviewSection() {
           </div>
         </div>
         <div className="two-column-fields">
-          <Field label="Date" value="25 May 2025" />
-          <Field label="Start" value={store.scenario.startTime} />
+          <Field label="Event Starts" value="19:30" />
+          <Field label="Arrivals From" value={store.scenario.startTime} />
         </div>
         <Field
           label="Weather"
@@ -71,10 +71,10 @@ export function OverviewSection() {
         <div className="scenario-detail-box">
           <span>EVENT DETAILS</span>
           <dl>
-            <div><dt>Event</dt><dd>Leadership Rally</dd></div>
-            <div><dt>Start Point</dt><dd>Island Grounds</dd></div>
-            <div><dt>End Point</dt><dd>Gandhi Statue</dd></div>
-            <div><dt>Stage Area</dt><dd>Marina Beach</dd></div>
+            <div><dt>Event</dt><dd>Political Party Rally</dd></div>
+            <div><dt>Origins</dt><dd>Chennai neighbourhoods</dd></div>
+            <div><dt>Travel</dt><dd>Public transport + walking</dd></div>
+            <div><dt>Venue</dt><dd>YMCA Grounds, Nandanam</dd></div>
           </dl>
         </div>
 
@@ -82,7 +82,7 @@ export function OverviewSection() {
           {running ? <Pause size={15} /> : <Play size={15} />}
           {running ? "PAUSE SIMULATION" : "RUN SIMULATION"}
         </button>
-        <small className="helper-text">Synthetic 4-hour scenario · accelerated playback</small>
+        <small className="helper-text">25k–35k rally · road-routed arrivals · event at 7:30 PM</small>
 
         <div className="data-source-row">
           <span className="live-dot" /> 12 ACTIVE DATA SOURCES
