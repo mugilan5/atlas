@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import {
   Activity,
@@ -30,6 +30,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { useState } from "react";
 import { MAP_LAYERS } from "@/data/scenario";
 import { downloadSimulationReport } from "@/lib/report";
 import { formatSimulationTime, metricClass, riskLabel } from "@/lib/format";
@@ -60,6 +61,14 @@ export function OverviewSection() {
   const store = useAtlasStore();
   const running = store.status === "running";
   const currentTime = formatSimulationTime(store.scenario.startTime, store.minute);
+  const [populationDraft, setPopulationDraft] = useState(store.scenario.expectedCrowd);
+
+  function simulateWithPopulation() {
+    const clamped = Math.min(500_000, Math.max(5_000, populationDraft));
+    setPopulationDraft(clamped);
+    store.updateScenario({ ...store.scenario, expectedCrowd: clamped });
+    store.start();
+  }
 
   return (
     <div className="overview-layout">
@@ -68,7 +77,23 @@ export function OverviewSection() {
 
         <Field label="Scenario Type" value="Political Rally · Public Event" />
         <Field label="Location" value={store.scenario.location} />
-        <Field label="Expected Crowd" value={`${store.scenario.expectedCrowd.toLocaleString("en-IN")} people`} />
+        <div className="scenario-field">
+          <span>Population (Expected Crowd)</span>
+          <div style={{ display: "flex", gap: "8px" }}>
+            <input
+              type="number"
+              min={5000}
+              max={500000}
+              step={5000}
+              value={populationDraft}
+              onChange={(event: { target: { value: string } }) => setPopulationDraft(Number(event.target.value))}
+              style={{ flex: 1 }}
+            />
+            <button className="primary-light-button" onClick={simulateWithPopulation}>
+              Simulate
+            </button>
+          </div>
+        </div>
         <div className="two-column-fields">
           <Field label="Date" value="25 May 2025" />
           <Field label="Start" value={store.scenario.startTime} />

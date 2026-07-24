@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import type { CSSProperties } from "react";
 import { useEffect, useMemo, useState } from "react";
@@ -11,7 +11,7 @@ import {
   TrainFront,
   TramFront,
 } from "lucide-react";
-import { Marker } from "react-map-gl/maplibre";
+import { Marker } from "react-map-gl/mapbox";
 
 import {
   chennaiCityLocations,

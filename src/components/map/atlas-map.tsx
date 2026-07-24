@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { RealisticCrowd } from "@/components/map/realistic-crowd";
 
@@ -10,7 +10,7 @@ import Map, {
   NavigationControl,
   ScaleControl,
   Source,
-} from "react-map-gl/maplibre";
+} from "react-map-gl/mapbox";
 import type {
   FeatureCollection,
   LineString,
@@ -42,8 +42,8 @@ const CHENNAI_VIEW = {
   bearing: -8,
 };
 
-const CARTO_DARK_STYLE =
-  "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json";
+const MAPBOX_ACCESS_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
+const MAPBOX_STYLE = "mapbox://styles/mapbox/satellite-streets-v12";
 
 const routeColors = ["#ff4147", "#f5bf35", "#39c983", "#4a8dff", "#a879ff"];
 
@@ -119,8 +119,9 @@ export function AtlasMap() {
     <div className="real-chennai-map">
       <Map
         initialViewState={CHENNAI_VIEW}
-        mapStyle={CARTO_DARK_STYLE}
-        attributionControl={{ compact: true }}
+        mapStyle={MAPBOX_STYLE}
+        mapboxAccessToken={MAPBOX_ACCESS_TOKEN}
+        attributionControl={true}
         style={{ width: "100%", height: "100%" }}
         reuseMaps
         maxPitch={65}

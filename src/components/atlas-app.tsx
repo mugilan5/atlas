@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import {
@@ -16,7 +16,7 @@ import {
   ShieldCheck,
   Sun,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AssetsSection } from "@/components/sections/assets";
 import { IntelligenceSection } from "@/components/sections/intelligence";
 import { OverviewSection } from "@/components/sections/overview";
@@ -39,7 +39,19 @@ export function AtlasApp() {
   const activeView = useAtlasStore((state) => state.activeView);
   const setActiveView = useAtlasStore((state) => state.setActiveView);
   const status = useAtlasStore((state) => state.status);
-  const [themeIcon, setThemeIcon] = useState<"moon" | "sun">("moon");
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+
+  useEffect(() => {
+    const stored = window.localStorage.getItem("atlas-theme");
+    if (stored === "light" || stored === "dark") {
+      setTheme(stored);
+    }
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    window.localStorage.setItem("atlas-theme", theme);
+  }, [theme]);
 
   if (!hasEntered) {
     return (
@@ -83,7 +95,7 @@ export function AtlasApp() {
           aria-label="Open ATLAS overview"
         >
           <Image
-            src="/logo/atlas-logo.svg"
+            src={theme === "light" ? "/logo/atlas-logo-dark.svg" : "/logo/atlas-logo.svg"}
             alt="ATLAS"
             width={138}
             height={42}
@@ -98,7 +110,7 @@ export function AtlasApp() {
           ))}
         </nav>
         <div className="header-actions">
-          <button aria-label="Toggle visual theme" onClick={() => setThemeIcon(themeIcon === "moon" ? "sun" : "moon")}>{themeIcon === "moon" ? <Moon size={15} /> : <Sun size={15} />}</button>
+          <button aria-label="Toggle light or dark mode" onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>{theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}</button>
           <button><ShieldCheck size={15} /><span>Chennai Corporation</span><ChevronDown size={13} /></button>
         </div>
       </header>

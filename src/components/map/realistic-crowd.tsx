@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import {
   useEffect,
@@ -12,7 +12,12 @@ import type {
   Point,
   Position,
 } from "geojson";
-import { Layer, Source } from "react-map-gl/maplibre";
+import { Layer, Source } from "react-map-gl/mapbox";
+import { useAtlasStore } from "@/store/use-atlas-store";
+
+// The map's baked-in agent/rally counts (420 / 1450) were tuned against
+// this reference population. Population changes scale from here.
+const BASELINE_POPULATION = 120_000;
 
 type PathKind =
   | "pedestrian"
@@ -81,6 +86,11 @@ const RALLY_CENTER: [number, number] = [
   80.28215,
   13.05065,
 ];
+
+// Marina's shoreline runs roughly north-south here. Anything east of
+// this longitude is open water, so crowd dots are clamped to stay on
+// the beach/promenade side instead of drifting out to sea.
+const MAX_LAND_LONGITUDE = 80.286;
 
 const FALLBACK_PATHS: NetworkPath[] = [
   {
@@ -464,7 +474,16 @@ export function RealisticCrowd() {
   const movingAgentsRef = useRef<MovingAgent[]>([]);
   const rallyAgentsRef = useRef<RallyAgent[]>([]);
 
-  const frame = 0;
+  const expectedCrowd = useAtlasStore((state) => state.scenario.expectedCrowd);
+  const populationScale = Math.min(
+    2.4,
+    Math.max(0.35, expectedCrowd / BASELINE_POPULATION),
+  );
+
+  const status = useAtlasStore((state) => state.status);
+  const speed = useAtlasStore((state) => state.speed);
+
+  const [frame, setFrame] = useState(0);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -525,15 +544,52 @@ export function RealisticCrowd() {
   useEffect(() => {
     movingAgentsRef.current = createMovingAgents(
       paths,
-      420,
+      Math.round(420 * populationScale),
     );
 
-    rallyAgentsRef.current = createRallyAgents(1450);
-  }, [paths]);
-  /*
-   * Crowd positions are intentionally static.
-   * Density remains visible without agents moving around the map.
-   */
+    rallyAgentsRef.current = createRallyAgents(
+      Math.round(1450 * populationScale),
+    );
+  }, [paths, populationScale]);
+
+  useEffect(() => {
+    if (status !== "running") {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      const step = 7 * speed;
+
+      movingAgentsRef.current = movingAgentsRef.current.map((agent) => {
+        let nextProgress = agent.progress + agent.speed * agent.direction * step;
+        let nextDirection = agent.direction;
+
+        if (nextProgress >= 1) {
+          nextProgress = 1;
+          nextDirection = -1;
+        } else if (nextProgress <= 0) {
+          nextProgress = 0;
+          nextDirection = 1;
+        }
+
+        return {
+          ...agent,
+          progress: nextProgress,
+          direction: nextDirection,
+        };
+      });
+
+      rallyAgentsRef.current = rallyAgentsRef.current.map((agent) => ({
+        ...agent,
+        angle: agent.angle + agent.angularSpeed * step,
+        phase: agent.phase + 0.05 * speed,
+      }));
+
+      setFrame((value) => value + 1);
+    }, 180);
+
+    return () => clearInterval(interval);
+  }, [status, speed]);
 
 
   const roadNetworkGeoJson = useMemo<
@@ -573,12 +629,17 @@ export function RealisticCrowd() {
             paths[agent.pathIndex % paths.length] ??
             paths[0];
 
-          const [longitude, latitude] =
+          const [rawLongitude, latitude] =
             interpolatePath(
               path.coordinates,
               agent.progress,
               agent.lateralOffset,
             );
+
+          const longitude = Math.min(
+            rawLongitude,
+            MAX_LAND_LONGITUDE,
+          );
 
           return {
             type: "Feature",
@@ -621,9 +682,14 @@ export function RealisticCrowd() {
           const radius =
             agent.radius + breathing;
 
-          const longitude =
+          const rawLongitude =
             RALLY_CENTER[0] +
             Math.cos(agent.angle) * radius * 0.78;
+
+          const longitude = Math.min(
+            rawLongitude,
+            MAX_LAND_LONGITUDE,
+          );
 
           const latitude =
             RALLY_CENTER[1] +
@@ -727,75 +793,31 @@ export function RealisticCrowd() {
         type="geojson"
         data={rallyCrowdGeoJson}
       >
-        <Layer
-          id="atlas-rally-density-heatmap"
-          type="heatmap"
-          maxzoom={17}
-          paint={{
-            "heatmap-weight": [
-              "get",
-              "intensity",
-            ],
-            "heatmap-intensity": [
-              "interpolate",
-              ["linear"],
-              ["zoom"],
-              11,
-              0.85,
-              16,
-              1.8,
-            ],
-            "heatmap-radius": [
-              "interpolate",
-              ["linear"],
-              ["zoom"],
-              11,
-              10,
-              16,
-              24,
-            ],
-            "heatmap-opacity": 0.58,
-            "heatmap-color": [
-              "interpolate",
-              ["linear"],
-              ["heatmap-density"],
-              0,
-              "rgba(30,100,220,0)",
-              0.18,
-              "rgba(35,115,230,0.72)",
-              0.38,
-              "rgba(39,194,107,0.78)",
-              0.62,
-              "rgba(247,151,30,0.84)",
-              0.82,
-              "rgba(239,59,45,0.9)",
-              1,
-              "rgba(160,15,25,0.96)",
-            ],
-          }}
-        />
 
         <Layer
           id="atlas-rally-individual-people"
           type="circle"
-          minzoom={13}
           paint={{
             "circle-radius": [
               "interpolate",
               ["linear"],
               ["zoom"],
-              13,
-              0.55,
+              11,
+              1.2,
+              14,
+              2.6,
               16,
-              1.65,
+              4.5,
             ],
             "circle-color": ["get", "color"],
             "circle-opacity": [
               "interpolate",
               ["linear"],
               ["zoom"],
-              13,
-              0.48,
+              11,
+              0.55,
+              14,
+              0.75,
               16,
               0.9,
             ],
@@ -817,12 +839,12 @@ export function RealisticCrowd() {
               "match",
               ["get", "type"],
               "emergency",
-              5,
+              8,
               "bus",
-              3.5,
+              6,
               "vehicle",
-              2.8,
-              2,
+              5,
+              3.5,
             ],
             "circle-color": ["get", "color"],
             "circle-opacity": 0.19,
@@ -843,24 +865,24 @@ export function RealisticCrowd() {
                 "match",
                 ["get", "type"],
                 "emergency",
-                2,
+                3.5,
                 "bus",
-                1.7,
+                3,
                 "vehicle",
-                1.3,
-                0.8,
+                2.4,
+                1.6,
               ],
               16,
               [
                 "match",
                 ["get", "type"],
                 "emergency",
-                3.3,
+                6,
                 "bus",
-                2.6,
+                5,
                 "vehicle",
-                2,
-                1.35,
+                4,
+                2.8,
               ],
             ],
             "circle-color": ["get", "color"],

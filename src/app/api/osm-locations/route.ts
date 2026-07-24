@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 export const revalidate = 86400;
@@ -63,13 +63,13 @@ const CATEGORY_DETAILS: Record<
 };
 
 /*
- * Greater Chennai bounding box:
+ * Marina Beach rally-area bounding box:
  * south, west, north, east
  *
- * This keeps the request focused on Chennai and avoids downloading
- * unrelated Tamil Nadu POIs.
+ * Scoped tightly around the event so the map only shows nearby
+ * points of interest instead of the entire Chennai metro area.
  */
-const CHENNAI_BBOX = "12.88,80.08,13.24,80.38";
+const CHENNAI_BBOX = "12.995,80.225,13.105,80.34";
 
 const OVERPASS_QUERY = `
 [out:json][timeout:40];

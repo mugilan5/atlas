@@ -94,6 +94,8 @@ export function advanceAgents(
   });
 }
 
+const BASELINE_POPULATION = 120_000;
+
 export function calculateMetrics(
   minute: number,
   agents: Agent[],
@@ -113,10 +115,14 @@ export function calculateMetrics(
 
   const has = (id: InterventionId) => interventions.includes(id);
   const crowdRatio = clamp(arrivedPeople / Math.max(1, config.expectedCrowd), 0, 1);
+  // Larger or smaller expected populations should meaningfully move crowd
+  // and traffic stress up or down, not just the arrival ratio.
+  const populationFactor = clamp(config.expectedCrowd / BASELINE_POPULATION, 0.4, 2.6);
 
-  let crowdDensity = 1.4 + crowdRatio * 8.2 + phase * 0.8;
-  let trafficIndex = 32 + phase * 38 + activePrivateVehicles * 0.12 + (config.roadClosure ? 17 : 0);
-  let publicTransportLoad = 68 + phase * 66;
+  let crowdDensity = (1.4 + crowdRatio * 8.2 + phase * 0.8) * populationFactor;
+  let trafficIndex =
+    32 + phase * 38 + activePrivateVehicles * 0.12 + (config.roadClosure ? 17 : 0) + (populationFactor - 1) * 22;
+  let publicTransportLoad = (68 + phase * 66) * (0.75 + populationFactor * 0.25);
   let emergencyAccessMinutes = 6 + trafficIndex * 0.095 + (config.roadClosure ? 5 : 0);
   let pollutionScore = 54 + trafficIndex * 0.62 + activePrivateVehicles * 0.045;
 
