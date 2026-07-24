@@ -997,25 +997,9 @@ export function YmcaRallySimulation() {
         }
 
         if (
-          minute <
-          agent.departureMinute
+          status !== "running" ||
+          minute < agent.departureMinute
         ) {
-          features.push({
-            type: "Feature",
-            properties: {
-              id: agent.id,
-              mode: agent.mode,
-              state: "waiting",
-              people:
-                agent.weight,
-            },
-            geometry: {
-              type: "Point",
-              coordinates:
-                agent.startPosition,
-            },
-          });
-
           continue;
         }
 
@@ -1063,7 +1047,7 @@ export function YmcaRallySimulation() {
         type: "FeatureCollection",
         features,
       };
-    }, [agents, minute, routes]);
+    }, [agents, minute, routes, status]);
 
   const groundGeoJson =
     useMemo<
