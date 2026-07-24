@@ -2,7 +2,8 @@
 
 ## AI-Powered Digital Twin Platform for Smarter Public Decision Making
 
-<img width="6772" height="3716" alt="Frame 23" src="https://github.com/user-attachments/assets/26545ae5-4ebc-4a2a-9018-81c084607f88" />
+<img width="6772" height="3716" alt="Frame 37" src="https://github.com/user-attachments/assets/ac14a0f8-7e1a-4e1a-8dde-71f230bbc46e" />
+
 
 Atlas enables governments and organizations to test critical decisions before they affect real people.
 
