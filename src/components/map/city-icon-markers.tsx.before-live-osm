@@ -1,0 +1,352 @@
+"use client";
+
+import type { CSSProperties } from "react";
+import { useEffect, useMemo, useState } from "react";
+import type { LucideIcon } from "lucide-react";
+import {
+  Construction,
+  Cross,
+  Landmark,
+  Route,
+  Shield,
+  TrainFront,
+  TramFront,
+} from "lucide-react";
+import { Marker } from "react-map-gl/maplibre";
+
+import {
+  chennaiCityLocations,
+  chennaiHighways,
+  chennaiRoadClosures,
+  type CityLocationProperties,
+} from "@/data/chennai-city-layers";
+
+type LocationCategory =
+  | "Tourist Place"
+  | "Hospital"
+  | "Metro Station"
+  | "Railway Station"
+  | "Police Station";
+
+type MapLocation = {
+  id: string;
+  name: string;
+  category: LocationCategory;
+  longitude: number;
+  latitude: number;
+  color: string;
+  source: "OpenStreetMap" | "Static fallback";
+};
+
+type OsmApiResponse = {
+  locations?: MapLocation[];
+  source?: string;
+  error?: string;
+};
+
+const iconByCategory: Record<LocationCategory, LucideIcon> = {
+  "Tourist Place": Landmark,
+  Hospital: Cross,
+  "Metro Station": TramFront,
+  "Railway Station": TrainFront,
+  "Police Station": Shield,
+};
+
+function convertStaticLocations(): MapLocation[] {
+  return chennaiCityLocations.features.map(
+    (feature, index) => ({
+      id: `fallback-${index}`,
+      name: feature.properties.name,
+      category: feature.properties.category,
+      longitude: feature.geometry.coordinates[0],
+      latitude: feature.geometry.coordinates[1],
+      color: feature.properties.color,
+      source: "Static fallback",
+    }),
+  );
+}
+
+function getLineMidpoint(coordinates: number[][]) {
+  if (coordinates.length === 0) {
+    return null;
+  }
+
+  /*
+   * Find the midpoint by cumulative distance rather than merely
+   * selecting the middle array item.
+   */
+  const segmentLengths: number[] = [];
+  let totalLength = 0;
+
+  for (
+    let index = 0;
+    index < coordinates.length - 1;
+    index += 1
+  ) {
+    const start = coordinates[index];
+    const end = coordinates[index + 1];
+
+    const deltaLongitude = end[0] - start[0];
+    const deltaLatitude = end[1] - start[1];
+
+    const segmentLength = Math.sqrt(
+      deltaLongitude * deltaLongitude +
+        deltaLatitude * deltaLatitude,
+    );
+
+    segmentLengths.push(segmentLength);
+    totalLength += segmentLength;
+  }
+
+  if (totalLength === 0) {
+    return coordinates[0];
+  }
+
+  const targetDistance = totalLength / 2;
+  let travelledDistance = 0;
+
+  for (
+    let index = 0;
+    index < segmentLengths.length;
+    index += 1
+  ) {
+    const segmentLength = segmentLengths[index];
+
+    if (
+      travelledDistance + segmentLength >= targetDistance
+    ) {
+      const start = coordinates[index];
+      const end = coordinates[index + 1];
+
+      const progress =
+        (targetDistance - travelledDistance) /
+        segmentLength;
+
+      return [
+        start[0] + (end[0] - start[0]) * progress,
+        start[1] + (end[1] - start[1]) * progress,
+      ];
+    }
+
+    travelledDistance += segmentLength;
+  }
+
+  return coordinates[coordinates.length - 1];
+}
+
+export function CityIconMarkers() {
+  const fallbackLocations = useMemo(
+    () => convertStaticLocations(),
+    [],
+  );
+
+  const [locations, setLocations] =
+    useState<MapLocation[]>(fallbackLocations);
+
+  const [dataSource, setDataSource] = useState<
+    "loading" | "OpenStreetMap" | "Static fallback"
+  >("loading");
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function loadLocations() {
+      try {
+        const response = await fetch("/api/osm-locations", {
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error(
+            `Location request returned ${response.status}`,
+          );
+        }
+
+        const payload =
+          (await response.json()) as OsmApiResponse;
+
+        if (
+          !Array.isArray(payload.locations) ||
+          payload.locations.length === 0
+        ) {
+          throw new Error(
+            payload.error ?? "No OSM locations returned",
+          );
+        }
+
+        setLocations(payload.locations);
+        setDataSource("OpenStreetMap");
+      } catch (error) {
+        if (
+          error instanceof DOMException &&
+          error.name === "AbortError"
+        ) {
+          return;
+        }
+
+        console.warn(
+          "ATLAS is using static location fallback:",
+          error,
+        );
+
+        setLocations(fallbackLocations);
+        setDataSource("Static fallback");
+      }
+    }
+
+    loadLocations();
+
+    return () => {
+      controller.abort();
+    };
+  }, [fallbackLocations]);
+
+  return (
+    <>
+      {locations.map((location) => {
+        const Icon = iconByCategory[location.category];
+
+        return (
+          <Marker
+            key={location.id}
+            longitude={location.longitude}
+            latitude={location.latitude}
+            anchor="center"
+          >
+            <button
+              type="button"
+              className="atlas-city-marker"
+              style={
+                {
+                  "--marker-color": location.color,
+                } as CSSProperties
+              }
+              title={`${location.category}: ${location.name}`}
+              aria-label={`${location.category}: ${location.name}`}
+            >
+              <span className="atlas-city-marker-pulse" />
+
+              <span className="atlas-city-marker-icon">
+                <Icon size={11} strokeWidth={2.4} />
+              </span>
+
+              <span className="atlas-city-marker-tooltip">
+                <strong>{location.name}</strong>
+                <small>{location.category}</small>
+                <em>{location.source}</em>
+              </span>
+            </button>
+          </Marker>
+        );
+      })}
+
+      {chennaiHighways.features.map((feature, index) => {
+        const midpoint = getLineMidpoint(
+          feature.geometry.coordinates,
+        );
+
+        if (!midpoint) {
+          return null;
+        }
+
+        const [longitude, latitude] = midpoint;
+
+        return (
+          <Marker
+            key={`highway-${feature.properties.name}-${index}`}
+            longitude={longitude}
+            latitude={latitude}
+            anchor="center"
+          >
+            <button
+              type="button"
+              className="atlas-city-marker atlas-road-marker"
+              style={
+                {
+                  "--marker-color": feature.properties.color,
+                } as CSSProperties
+              }
+              title={`Highway: ${feature.properties.name}`}
+            >
+              <span className="atlas-city-marker-icon">
+                <Route size={11} strokeWidth={2.5} />
+              </span>
+
+              <span className="atlas-city-marker-tooltip">
+                <strong>{feature.properties.name}</strong>
+                <small>Highway</small>
+                <em>ATLAS map layer</em>
+              </span>
+            </button>
+          </Marker>
+        );
+      })}
+
+      {chennaiRoadClosures.features.map(
+        (feature, index) => {
+          const midpoint = getLineMidpoint(
+            feature.geometry.coordinates,
+          );
+
+          if (!midpoint) {
+            return null;
+          }
+
+          const [longitude, latitude] = midpoint;
+
+          return (
+            <Marker
+              key={`closure-${feature.properties.name}-${index}`}
+              longitude={longitude}
+              latitude={latitude}
+              anchor="center"
+            >
+              <button
+                type="button"
+                className="atlas-city-marker atlas-closure-marker"
+                style={
+                  {
+                    "--marker-color":
+                      feature.properties.color,
+                  } as CSSProperties
+                }
+                title={`Road closure: ${feature.properties.name}`}
+              >
+                <span className="atlas-city-marker-pulse" />
+
+                <span className="atlas-city-marker-icon">
+                  <Construction
+                    size={12}
+                    strokeWidth={2.6}
+                  />
+                </span>
+
+                <span className="atlas-city-marker-tooltip">
+                  <strong>{feature.properties.name}</strong>
+                  <small>Simulated road closure</small>
+                  <em>ATLAS scenario data</em>
+                </span>
+              </button>
+            </Marker>
+          );
+        },
+      )}
+
+      <div className="atlas-osm-status">
+        <span
+          className={
+            dataSource === "OpenStreetMap"
+              ? "atlas-osm-status-dot live"
+              : "atlas-osm-status-dot"
+          }
+        />
+
+        {dataSource === "loading"
+          ? "Loading live locations"
+          : dataSource === "OpenStreetMap"
+            ? `${locations.length} OSM locations`
+            : "Static location fallback"}
+      </div>
+    </>
+  );
+}
