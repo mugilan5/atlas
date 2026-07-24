@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   color-scheme: dark;
   --bg: #050708;
   --panel: #0a0d10;
@@ -1261,3 +1261,1440 @@ select {
     padding: 7px 9px;
   }
 }
+
+/* ATLAS_POLICY_OPTIMIZER_START */
+
+.optimizer-page {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 100%;
+  padding: 18px;
+  background: #f5f7fa;
+  color: #111827;
+  overflow: auto;
+}
+
+.optimizer-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.optimizer-heading > div > span,
+.optimizer-card-title > div > span {
+  display: block;
+  margin-bottom: 5px;
+  color: #64748b;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.optimizer-heading h1 {
+  margin: 0;
+  color: #111827;
+  font-size: 26px;
+  line-height: 1.1;
+}
+
+.optimizer-heading p {
+  max-width: 680px;
+  margin: 7px 0 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.optimizer-run-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 195px;
+  padding: 10px 14px;
+  border: 1px solid #111827;
+  border-radius: 6px;
+  background: #111827;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.optimizer-run-button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.optimizer-spinning {
+  animation: optimizer-spin 0.8s linear infinite;
+}
+
+@keyframes optimizer-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.optimizer-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.optimizer-stat {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 14px;
+  border: 1px solid #d9e0e8 !important;
+  border-radius: 7px;
+  background: #ffffff !important;
+}
+
+.optimizer-stat > svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: #475569;
+}
+
+.optimizer-stat div {
+  display: flex;
+  flex-direction: column;
+}
+
+.optimizer-stat span {
+  color: #64748b;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.optimizer-stat strong {
+  margin-top: 3px;
+  color: #111827;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.optimizer-stat small {
+  margin-top: 6px;
+  color: #94a3b8;
+  font-size: 9px;
+}
+
+.optimizer-main-grid {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 12px;
+}
+
+.optimizer-weights,
+.optimizer-winner,
+.optimizer-ranking-panel {
+  border: 1px solid #d9e0e8 !important;
+  border-radius: 7px;
+  background: #ffffff !important;
+}
+
+.optimizer-weights {
+  padding: 15px;
+}
+
+.optimizer-card-title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.optimizer-card-title h2 {
+  margin: 0;
+  color: #111827;
+  font-size: 16px;
+}
+
+.optimizer-card-title > svg {
+  color: #64748b;
+}
+
+.optimizer-muted {
+  margin: 10px 0 14px;
+  color: #64748b;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.optimizer-weight-list {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.optimizer-weight-control {
+  display: block;
+}
+
+.optimizer-weight-control > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.optimizer-weight-control span {
+  color: #334155;
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.optimizer-weight-control strong {
+  color: #111827;
+  font-size: 11px;
+}
+
+.optimizer-weight-control small {
+  display: block;
+  margin-top: 2px;
+  color: #94a3b8;
+  font-size: 8px;
+}
+
+.optimizer-weight-control input {
+  width: 100%;
+  height: 4px;
+  margin-top: 8px;
+  padding: 0;
+  accent-color: #111827;
+  cursor: pointer;
+}
+
+.optimizer-model-note {
+  margin-top: 16px;
+  padding: 11px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #f8fafc;
+}
+
+.optimizer-model-note strong {
+  color: #334155;
+  font-size: 10px;
+}
+
+.optimizer-model-note p {
+  margin: 5px 0 0;
+  color: #64748b;
+  font-size: 9px;
+  line-height: 1.55;
+}
+
+.optimizer-winner {
+  display: flex;
+  flex-direction: column;
+  padding: 17px;
+}
+
+.optimizer-winner-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.optimizer-recommended-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #15803d;
+  font-size: 9px;
+  font-weight: 750;
+  letter-spacing: 0.1em;
+}
+
+.optimizer-winner h2 {
+  margin: 8px 0 0;
+  color: #111827;
+  font-size: 22px;
+}
+
+.optimizer-policy-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 11px;
+}
+
+.optimizer-policy-chip {
+  padding: 5px 8px;
+  border: 1px solid #bfdbfe;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 9px;
+  font-weight: 650;
+}
+
+.optimizer-policy-chip.baseline {
+  border-color: #d5dbe3;
+  background: #f8fafc;
+  color: #64748b;
+}
+
+.optimizer-score-ring {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  width: 84px;
+  height: 84px;
+  flex: 0 0 84px;
+  border: 7px solid #dcfce7;
+  border-top-color: #16a34a;
+  border-right-color: #16a34a;
+  border-radius: 50%;
+  background: #ffffff;
+  padding-top: 21px;
+}
+
+.optimizer-score-ring strong {
+  color: #15803d;
+  font-size: 25px;
+}
+
+.optimizer-score-ring span {
+  color: #64748b;
+  font-size: 9px;
+}
+
+.optimizer-outcome-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.optimizer-outcome-grid article {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  padding: 11px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #f8fafc;
+}
+
+.optimizer-outcome-grid svg {
+  margin-bottom: 8px;
+  color: #64748b;
+}
+
+.optimizer-outcome-grid span {
+  color: #64748b;
+  font-size: 8px;
+  text-transform: uppercase;
+}
+
+.optimizer-outcome-grid strong {
+  margin-top: 4px;
+  color: #111827;
+  font-size: 17px;
+}
+
+.optimizer-outcome-grid small {
+  margin-top: 5px;
+  color: #15803d;
+  font-size: 9px;
+  font-weight: 650;
+}
+
+.optimizer-winner-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: auto;
+  padding-top: 16px;
+}
+
+.optimizer-winner-footer > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.optimizer-winner-footer strong {
+  color: #111827;
+  font-size: 10px;
+}
+
+.optimizer-winner-footer span {
+  margin-top: 3px;
+  color: #64748b;
+  font-size: 9px;
+}
+
+.optimizer-winner-footer button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 12px;
+  border: 1px solid #111827;
+  border-radius: 5px;
+  background: #111827;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.optimizer-winner-footer button:disabled {
+  border-color: #cbd5e1;
+  background: #e2e8f0;
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+.optimizer-ranking-panel {
+  padding: 15px;
+}
+
+.optimizer-run-version {
+  color: #94a3b8;
+  font-size: 9px;
+}
+
+.optimizer-table-wrap {
+  margin-top: 13px;
+  overflow-x: auto;
+}
+
+.optimizer-table {
+  width: 100%;
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+.optimizer-table th {
+  padding: 9px 10px;
+  border-bottom: 1px solid #d8e0e8;
+  color: #64748b;
+  font-size: 8px;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.optimizer-table td {
+  padding: 10px;
+  border-bottom: 1px solid #edf1f5;
+  color: #334155;
+  font-size: 10px;
+}
+
+.optimizer-table tr.best {
+  background: #f0fdf4;
+}
+
+.optimizer-table-strategy {
+  display: flex;
+  align-items: flex-start;
+  min-width: 250px;
+  flex-direction: column;
+}
+
+.optimizer-table-strategy > strong {
+  color: #111827;
+  font-size: 10px;
+}
+
+.optimizer-table-strategy > span {
+  max-width: 330px;
+  margin-top: 3px;
+  overflow: hidden;
+  color: #64748b;
+  font-size: 8px;
+  text-overflow: ellipsis;
+}
+
+.optimizer-table-strategy > b {
+  margin-top: 5px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  background: #dcfce7;
+  color: #15803d;
+  font-size: 7px;
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 1100px) {
+  .optimizer-stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .optimizer-main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .optimizer-outcome-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .optimizer-page {
+    padding: 11px;
+  }
+
+  .optimizer-heading {
+    flex-direction: column;
+  }
+
+  .optimizer-run-button {
+    width: 100%;
+  }
+
+  .optimizer-stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .optimizer-winner-top {
+    flex-direction: column;
+  }
+
+  .optimizer-outcome-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .optimizer-winner-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .optimizer-winner-footer button {
+    justify-content: center;
+  }
+}
+
+/* ATLAS_POLICY_OPTIMIZER_END */
+
+/* ATLAS_KPI_EXPLAINERS_START */
+
+/* KPI labels and explanation icons */
+
+.label-with-info,
+.metric-label-row,
+.resource-label-row {
+  display: flex !important;
+  align-items: center;
+  gap: 5px;
+}
+
+.risk-title > .label-with-info {
+  flex: 1;
+}
+
+.kpi-info {
+  position: relative;
+  z-index: 25;
+  display: inline-flex;
+  width: 17px;
+  height: 17px;
+  flex: 0 0 17px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #cbd5e1;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #64748b;
+  cursor: help;
+  outline: none;
+}
+
+.kpi-info.compact {
+  width: 15px;
+  height: 15px;
+  flex-basis: 15px;
+}
+
+.kpi-info:hover,
+.kpi-info:focus-visible {
+  border-color: #111827;
+  background: #111827;
+  color: #ffffff;
+}
+
+.kpi-tooltip {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 9px);
+  z-index: 1000;
+  display: block !important;
+  width: 245px;
+  padding: 10px 11px;
+  visibility: hidden;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #111827;
+  color: #ffffff !important;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.24);
+  font-size: 10px !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  letter-spacing: 0 !important;
+  text-align: left;
+  text-transform: none !important;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+  transition:
+    opacity 120ms ease,
+    transform 120ms ease,
+    visibility 120ms ease;
+}
+
+.kpi-tooltip::after {
+  position: absolute;
+  right: 5px;
+  top: 100%;
+  width: 0;
+  height: 0;
+  content: "";
+  border: 6px solid transparent;
+  border-top-color: #111827;
+}
+
+.kpi-info:hover .kpi-tooltip,
+.kpi-info:focus-visible .kpi-tooltip {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* More readable KPI cards */
+
+.metric-box {
+  overflow: visible !important;
+}
+
+.metric-box .metric-content {
+  display: flex !important;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.metric-label-row {
+  justify-content: space-between;
+}
+
+.metric-label-row > span:first-child {
+  color: #64748b !important;
+  font-size: 8px !important;
+  font-weight: 650;
+  line-height: 1.25;
+}
+
+.metric-box strong {
+  margin-top: 3px;
+}
+
+/* Larger and clearer live recommendations */
+
+.recommendations-list {
+  overflow: visible;
+}
+
+.recommendations-list .right-section-title {
+  align-items: center;
+  margin-bottom: 3px;
+}
+
+.recommendations-list button.recommendation-action {
+  width: 100%;
+  min-height: 58px;
+  display: grid;
+  grid-template-columns: 19px minmax(0, 1fr) auto;
+  gap: 9px;
+  align-items: center;
+  padding: 9px 3px;
+  border-top: 1px solid #e5e9ee;
+  background: transparent;
+  color: #111827;
+  text-align: left;
+}
+
+.recommendations-list button.recommendation-action:hover {
+  background: #f8fafc;
+}
+
+.recommendations-list button.recommendation-action > svg {
+  color: #dc2626;
+}
+
+.recommendation-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.recommendation-copy strong {
+  color: #111827;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.recommendation-copy small {
+  color: #64748b;
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.recommendations-list button.recommendation-action > b {
+  padding: 5px 6px;
+  border: 1px solid #fecaca;
+  border-radius: 4px;
+  background: #fef2f2;
+  color: #dc2626;
+  font-size: 8px;
+  font-weight: 750;
+}
+
+.recommendation-empty {
+  min-height: 45px;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  color: #64748b !important;
+  font-size: 10px !important;
+}
+
+/* Live resource-deployment section */
+
+.resource-section {
+  overflow: visible;
+}
+
+.resource-section-heading {
+  align-items: flex-start;
+  margin-bottom: 9px;
+}
+
+.resource-section-heading h3 {
+  margin-bottom: 0;
+}
+
+.resource-grid article.resource-card {
+  position: relative;
+  min-height: 79px;
+  padding: 8px 4px;
+  overflow: visible;
+}
+
+.resource-grid article.resource-card > strong {
+  color: #111827;
+  font-size: 19px;
+  font-weight: 650;
+}
+
+.resource-label-row {
+  justify-content: center;
+}
+
+.resource-label-row > span:first-child {
+  color: #64748b !important;
+  font-size: 7px !important;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.resource-label-row .kpi-tooltip {
+  right: -5px;
+  width: 215px;
+}
+
+.resource-need-banner {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px;
+  align-items: flex-start;
+  margin-top: 7px;
+  padding: 8px 9px;
+  border: 1px solid #dbe2e9;
+  background: #f8fafc;
+}
+
+.resource-need-banner > span {
+  padding: 3px 5px;
+  border-radius: 3px;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.resource-need-banner p {
+  margin: 0;
+  color: #64748b;
+  font-size: 8px;
+  line-height: 1.45;
+}
+
+.resource-need-banner.normal > span {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.resource-need-banner.elevated > span {
+  background: #fef3c7;
+  color: #a16207;
+}
+
+.resource-need-banner.critical > span {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* Make Intelligence use the same visual language as other pages */
+
+.workspace-page,
+.optimizer-page {
+  background: #f4f6f8 !important;
+  color: #111827 !important;
+}
+
+.optimizer-heading,
+.page-heading {
+  border-bottom-color: #d7dde5 !important;
+}
+
+.optimizer-heading > div > span,
+.page-heading > div > span,
+.board-title span,
+.model-card > span {
+  color: #dc2626 !important;
+}
+
+.optimizer-page .panel,
+.intelligence-summary .panel,
+.recommendation-column,
+.model-card,
+.recommendation-card {
+  border: 1px solid #d7dde5 !important;
+  border-radius: 0 !important;
+  background: #ffffff !important;
+  color: #111827 !important;
+  box-shadow: none !important;
+}
+
+.intelligence-summary {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+.intelligence-score {
+  min-height: 130px;
+  padding: 17px;
+}
+
+.intelligence-score > span {
+  color: #64748b !important;
+  font-size: 10px;
+  font-weight: 650;
+  text-transform: uppercase;
+}
+
+.intelligence-score > strong {
+  color: #111827 !important;
+  font-size: 26px;
+}
+
+.intelligence-score > p {
+  color: #64748b !important;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.recommendation-card {
+  margin-top: 9px;
+  padding: 15px;
+}
+
+.recommendation-card h3 {
+  color: #111827 !important;
+  font-size: 15px !important;
+  line-height: 1.35;
+}
+
+.recommendation-card p {
+  color: #475569 !important;
+  font-size: 12px !important;
+  line-height: 1.55;
+}
+
+.recommendation-card small {
+  color: #64748b !important;
+  font-size: 10px !important;
+  line-height: 1.45;
+}
+
+.recommendation-card button {
+  min-height: 35px;
+  padding: 0 11px;
+  background: #111827 !important;
+  color: #ffffff !important;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.model-card ol,
+.model-card p,
+.model-card li,
+.model-disclaimer {
+  color: #475569 !important;
+  font-size: 11px !important;
+  line-height: 1.55;
+}
+
+/* Align the optimizer page with Atlas page styling */
+
+.optimizer-page {
+  padding: 22px !important;
+}
+
+.optimizer-heading {
+  padding-bottom: 16px;
+  border-bottom: 1px solid #d7dde5;
+}
+
+.optimizer-stat,
+.optimizer-weights,
+.optimizer-winner,
+.optimizer-ranking-panel {
+  border-radius: 0 !important;
+}
+
+.optimizer-recommended-label {
+  color: #dc2626 !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+}
+
+.optimizer-winner h2 {
+  color: #111827 !important;
+  font-size: 23px !important;
+}
+
+.optimizer-policy-chip {
+  font-size: 10px !important;
+}
+
+.optimizer-winner-footer strong {
+  font-size: 12px !important;
+}
+
+.optimizer-winner-footer span {
+  font-size: 10px !important;
+  line-height: 1.4;
+}
+
+@media (max-width: 700px) {
+  .kpi-tooltip {
+    width: min(230px, 72vw);
+  }
+
+  .intelligence-summary {
+    grid-template-columns: 1fr !important;
+  }
+
+  .recommendation-copy strong {
+    font-size: 10px;
+  }
+
+  .recommendation-copy small {
+    font-size: 8px;
+  }
+}
+
+/* ATLAS_KPI_EXPLAINERS_END */
+
+/* ATLAS_INTELLIGENCE_UI_V2_START */
+
+/* =========================================================
+   Intelligence page — match the main Atlas dashboard
+   ========================================================= */
+
+.workspace-page,
+.optimizer-page {
+  min-height: 100%;
+  padding: 18px;
+  background: #f4f6f8 !important;
+  color: #111827 !important;
+  overflow: auto;
+}
+
+/* Page heading */
+
+.page-heading,
+.optimizer-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #d7dde5;
+}
+
+.page-heading > div > span,
+.optimizer-heading > div > span {
+  display: block;
+  margin-bottom: 6px;
+  color: #dc2626 !important;
+  font-size: 10px !important;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+}
+
+.page-heading h1,
+.optimizer-heading h1 {
+  margin: 0;
+  color: #111827 !important;
+  font-size: 27px !important;
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+}
+
+.page-heading p,
+.optimizer-heading p {
+  max-width: 720px;
+  margin: 8px 0 0;
+  color: #64748b !important;
+  font-size: 13px !important;
+  line-height: 1.55;
+}
+
+/* Use the same panel language as Overview */
+
+.workspace-page .panel,
+.optimizer-page .panel,
+.intelligence-score,
+.recommendation-column,
+.model-card,
+.recommendation-card,
+.optimizer-stat,
+.optimizer-weights,
+.optimizer-winner,
+.optimizer-ranking-panel {
+  border: 1px solid #d7dde5 !important;
+  border-radius: 0 !important;
+  background: #ffffff !important;
+  color: #111827 !important;
+  box-shadow: none !important;
+}
+
+/* Intelligence KPI summary */
+
+.intelligence-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.intelligence-score {
+  min-height: 145px;
+  padding: 17px !important;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.intelligence-score > svg {
+  margin-bottom: 12px;
+  color: #475569 !important;
+}
+
+.intelligence-score > span {
+  color: #64748b !important;
+  font-size: 11px !important;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.intelligence-score > strong {
+  margin-top: 7px;
+  color: #111827 !important;
+  font-size: 29px !important;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.intelligence-score > p {
+  margin: 10px 0 0;
+  color: #64748b !important;
+  font-size: 12px !important;
+  line-height: 1.55;
+}
+
+/* Recommendation and model layout */
+
+.recommendation-board {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 310px;
+  gap: 10px;
+  margin-top: 10px;
+  align-items: start;
+}
+
+.recommendation-column,
+.model-card {
+  padding: 17px !important;
+}
+
+.board-title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.board-title span,
+.model-card > span {
+  color: #dc2626 !important;
+  font-size: 10px !important;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.board-title h2,
+.model-card h2 {
+  margin: 5px 0 0;
+  color: #111827 !important;
+  font-size: 18px !important;
+  line-height: 1.25;
+}
+
+.board-title > svg {
+  color: #64748b;
+}
+
+/* Bigger recommendation text */
+
+.recommendation-card {
+  margin-top: 10px;
+  padding: 16px !important;
+}
+
+.recommendation-card .priority {
+  width: max-content;
+  margin-bottom: 9px;
+  padding: 4px 7px;
+  border: 1px solid #d7dde5;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 9px !important;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.recommendation-card .priority.high {
+  border-color: #fecaca;
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.recommendation-card .priority.medium {
+  border-color: #fde68a;
+  background: #fffbeb;
+  color: #a16207;
+}
+
+.recommendation-card .priority.low {
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+  color: #15803d;
+}
+
+.recommendation-card h3 {
+  margin: 0;
+  color: #111827 !important;
+  font-size: 16px !important;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.recommendation-card p {
+  margin: 8px 0 0;
+  color: #475569 !important;
+  font-size: 13px !important;
+  line-height: 1.55;
+}
+
+.recommendation-card small {
+  display: block;
+  margin-top: 9px;
+  color: #64748b !important;
+  font-size: 11px !important;
+  line-height: 1.5;
+}
+
+.recommendation-card button {
+  min-height: 38px;
+  margin-top: 13px;
+  padding: 0 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid #111827 !important;
+  border-radius: 0 !important;
+  background: #111827 !important;
+  color: #ffffff !important;
+  font-size: 11px !important;
+  font-weight: 750;
+}
+
+.recommendation-card button:hover {
+  background: #dc2626 !important;
+  border-color: #dc2626 !important;
+}
+
+/* Empty recommendation state */
+
+.intelligence-empty {
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  text-align: center;
+}
+
+.intelligence-empty svg {
+  color: #15803d;
+}
+
+.intelligence-empty h3 {
+  margin: 11px 0 0;
+  color: #111827 !important;
+  font-size: 17px !important;
+}
+
+.intelligence-empty p {
+  max-width: 390px;
+  margin: 7px 0 0;
+  color: #64748b !important;
+  font-size: 12px !important;
+  line-height: 1.55;
+}
+
+/* Model trace */
+
+.model-card ol {
+  margin: 15px 0 0;
+  padding-left: 20px;
+}
+
+.model-card li {
+  margin-bottom: 10px;
+  color: #475569 !important;
+  font-size: 12px !important;
+  line-height: 1.55;
+}
+
+.model-disclaimer {
+  margin-top: 16px;
+  padding: 12px;
+  border: 1px solid #dbe2e9;
+  background: #f8fafc;
+  color: #64748b !important;
+  font-size: 11px !important;
+  line-height: 1.55;
+}
+
+/* =========================================================
+   Policy optimizer version
+   ========================================================= */
+
+.optimizer-page {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.optimizer-run-button {
+  min-height: 39px;
+  padding: 0 14px;
+  border: 1px solid #111827 !important;
+  border-radius: 0 !important;
+  background: #111827 !important;
+  color: #ffffff !important;
+  font-size: 11px !important;
+  font-weight: 750;
+}
+
+.optimizer-stat-grid {
+  gap: 10px !important;
+}
+
+.optimizer-stat {
+  min-height: 120px;
+  padding: 16px !important;
+}
+
+.optimizer-stat span {
+  color: #64748b !important;
+  font-size: 10px !important;
+}
+
+.optimizer-stat strong {
+  color: #111827 !important;
+  font-size: 27px !important;
+}
+
+.optimizer-stat small {
+  color: #64748b !important;
+  font-size: 10px !important;
+  line-height: 1.4;
+}
+
+.optimizer-card-title > div > span {
+  color: #dc2626 !important;
+  font-size: 10px !important;
+  font-weight: 800;
+}
+
+.optimizer-card-title h2 {
+  color: #111827 !important;
+  font-size: 18px !important;
+}
+
+.optimizer-muted {
+  color: #64748b !important;
+  font-size: 11px !important;
+  line-height: 1.55;
+}
+
+.optimizer-weight-control span,
+.optimizer-weight-control strong {
+  font-size: 12px !important;
+}
+
+.optimizer-weight-control small {
+  font-size: 10px !important;
+}
+
+.optimizer-recommended-label {
+  color: #dc2626 !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+}
+
+.optimizer-winner h2 {
+  color: #111827 !important;
+  font-size: 24px !important;
+  line-height: 1.25;
+}
+
+.optimizer-policy-chip {
+  border-radius: 0 !important;
+  font-size: 10px !important;
+}
+
+.optimizer-outcome-grid article {
+  border-radius: 0 !important;
+}
+
+.optimizer-outcome-grid span {
+  font-size: 9px !important;
+}
+
+.optimizer-outcome-grid strong {
+  font-size: 18px !important;
+}
+
+.optimizer-outcome-grid small {
+  font-size: 10px !important;
+}
+
+.optimizer-winner-footer strong {
+  font-size: 12px !important;
+}
+
+.optimizer-winner-footer span {
+  font-size: 10px !important;
+  line-height: 1.45;
+}
+
+.optimizer-winner-footer button {
+  min-height: 38px;
+  border-radius: 0 !important;
+  font-size: 11px !important;
+}
+
+.optimizer-table th {
+  font-size: 9px !important;
+}
+
+.optimizer-table td {
+  font-size: 11px !important;
+}
+
+.optimizer-table-strategy > strong {
+  color: #111827 !important;
+  font-size: 12px !important;
+}
+
+.optimizer-table-strategy > span {
+  color: #64748b !important;
+  font-size: 9px !important;
+}
+
+/* Responsive layout */
+
+@media (max-width: 1050px) {
+  .recommendation-board {
+    grid-template-columns: 1fr;
+  }
+
+  .intelligence-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .workspace-page,
+  .optimizer-page {
+    padding: 11px;
+  }
+
+  .page-heading h1,
+  .optimizer-heading h1 {
+    font-size: 23px !important;
+  }
+
+  .page-heading p,
+  .optimizer-heading p {
+    font-size: 12px !important;
+  }
+
+  .intelligence-summary {
+    grid-template-columns: 1fr !important;
+  }
+
+  .recommendation-card h3 {
+    font-size: 15px !important;
+  }
+
+  .recommendation-card p {
+    font-size: 12px !important;
+  }
+}
+
+/* ATLAS_INTELLIGENCE_UI_V2_END */
+
