@@ -144,6 +144,9 @@ Atlas aims to become the decision intelligence platform for modern cities by ena
 
 Rather than reacting to incidents after they occur, Atlas empowers authorities to anticipate outcomes, reduce risk, and make informed, data-driven decisions through AI-powered digital twin simulation.
 
+<img width="1920" height="1080" alt="16" src="https://github.com/user-attachments/assets/d66d4e50-8bb0-4c38-9d43-e607dcead281" />
+
+
 ---
 ## Complete Tech Stack
 
@@ -188,6 +191,7 @@ Rather than reacting to incidents after they occur, Atlas empowers authorities t
 ---
 
 ## System Architecture
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/27dc5c30-cfbb-496d-b425-7ef06742434e" />
 
 Atlas follows a modular architecture where user inputs are processed by an agent-based simulation engine that evaluates policy changes and visualizes their impact on a real-time digital twin of the city.
 
