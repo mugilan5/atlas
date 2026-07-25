@@ -26,6 +26,7 @@ Every simulation provides real-time insights into traffic, crowd movement, emerg
 ---
 
 # Problem Statement
+<img width="1920" height="1080" alt="3" src="https://github.com/user-attachments/assets/0d58b695-53a5-474b-8b64-a54481724dee" />
 
 Every major public decision impacts thousands—sometimes millions—of people.
 
@@ -44,6 +45,8 @@ Without the ability to safely test decisions beforehand, authorities are forced 
 ---
 
 # Solution
+<img width="1920" height="1080" alt="6" src="https://github.com/user-attachments/assets/ca9028b9-0267-46c3-92d4-3d95e004236c" />
+
 
 Atlas gives governments a safe environment to predict before they act.
 
@@ -60,6 +63,9 @@ Instead of learning from disasters, they can help prevent them.
 ---
 
 # Features
+
+<img width="1920" height="1080" alt="9" src="https://github.com/user-attachments/assets/9fa0fbb3-4632-482f-a20c-6df770d3598b" />
+
 
 ## AI Citizen Simulation
 
@@ -264,6 +270,10 @@ flowchart LR
 
 ## Detailed Workflow
 
+<img width="1920" height="1080" alt="7" src="https://github.com/user-attachments/assets/9efae196-3d59-4481-b0cb-20d3b8dfbac4" />
+<img width="1920" height="1080" alt="8" src="https://github.com/user-attachments/assets/8f472565-177e-4f81-a353-c894f3c1853b" />
+
+
 ```mermaid
 flowchart LR
 
@@ -284,6 +294,9 @@ G --> H[Support Decision Making]
 ```
 
 ### Workflow
+
+<img width="1920" height="1080" alt="14" src="https://github.com/user-attachments/assets/00f3689c-3d14-4e0f-a14a-6bc7b84fd098" />
+
 
 1. **Configure Scenario** – Select an event, location, and simulation parameters.
 2. **Load City Data** – Initialize the digital twin using GeoJSON and map data.
@@ -516,13 +529,13 @@ The following tests were performed to validate the core functionality of Atlas.
 
 | Test | Status |
 |------|--------|
-| Dashboard Rendering | Under Development |
-| Map Visualization | Under Development |
-| AI Citizen Generation | Under Development |
-| Agent-Based Simulation | Under Development |
-| Policy Intervention Logic | Under Development |
-| Real-Time Metrics Update | Under Development |
-| Responsive UI | Under Development |
+| Dashboard Rendering | ✅ Running |
+| Map Visualization | ✅ Running |
+| AI Citizen Generation | ✅ Running |
+| Agent-Based Simulation | ✅ Running |
+| Policy Intervention Logic | ✅ Running |
+| Real-Time Metrics Update | ✅ Running |
+| Responsive UI | ✅ Running |
 
 ---
 
@@ -554,6 +567,9 @@ During the development of Atlas, the team encountered several technical and desi
 
 ## Future Scope
 
+<img width="1920" height="1080" alt="15" src="https://github.com/user-attachments/assets/44474bd1-0f8c-49ca-bf37-5dce20e83a9f" />
+
+
 Atlas has the potential to evolve into a comprehensive decision intelligence platform for governments and smart cities. Future enhancements include:
 
 - Integration with real-time traffic and public transport data.
@@ -571,18 +587,25 @@ Atlas has the potential to evolve into a comprehensive decision intelligence pla
 
 ### Application
 
-> **Live Demo:** *Coming Soon*
+> **Live Demo:** *(https://atlas-pink-iota.vercel.app/)*
 
 ---
 
 ### Demo Video
 
-> **Demo Video:** *Coming Soon*
+> **Demo Video:** *(https://drive.google.com/file/d/1jGPD3ZrhE7dlckpawgq7RlsGxuuyjdw-/view?usp=sharing)*
 
 ---
 
 ### Screenshots
-> **Screenshot:** *Coming Soon*
+> **Screenshot:**
+<img width="1470" height="826" alt="image" src="https://github.com/user-attachments/assets/981e06c3-2951-4c49-b633-d628f4c9a30e" />
+<img width="1470" height="835" alt="image" src="https://github.com/user-attachments/assets/a8ec8d0c-d62f-4e6d-974c-204b9de21bbc" />
+<img width="1470" height="834" alt="image" src="https://github.com/user-attachments/assets/06a8984b-f2d6-48c7-ab94-3834ff48ec2f" />
+<img width="1470" height="834" alt="image" src="https://github.com/user-attachments/assets/e0605d84-63f2-4d2a-86b8-a9f7ae58cd46" />
+<img width="1470" height="834" alt="image" src="https://github.com/user-attachments/assets/c4f5f948-a8d4-429b-84ab-8efb1f3759e9" />
+
+
 
 ---
 
